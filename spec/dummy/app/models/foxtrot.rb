@@ -1,0 +1,2 @@
+class Foxtrot < ApplicationRecord
+end
