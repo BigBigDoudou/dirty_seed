@@ -22,7 +22,8 @@ module DirtySeed
     def seed
       reset_logs
       5.times do |sequence|
-        create_instance(sequence)
+        @sequence = sequence
+        create_instance
       end
     end
 
@@ -33,9 +34,8 @@ module DirtySeed
     end
 
     # creates an instance
-    def create_instance(sequence)
+    def create_instance
       @instance = model.new
-      @sequence = sequence
       associations.each(&:assign_value)
       attributes.each(&:assign_value)
       if instance.save
@@ -43,6 +43,8 @@ module DirtySeed
       else
         @errors << instance.errors.full_messages
       end
+    rescue ActiveRecord::ActiveRecordError => e
+      @errors << e
     end
 
     # returns an Array of ActiveRecord models
