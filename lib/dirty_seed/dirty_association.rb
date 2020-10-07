@@ -23,6 +23,8 @@ module DirtySeed
       return if associated_models.empty?
 
       model.instance.public_send(:"#{name}=", value)
+    rescue ArgumentError
+      nil
     end
 
     # returns a random instance matching the reflection

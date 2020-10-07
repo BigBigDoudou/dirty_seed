@@ -24,6 +24,8 @@ module DirtySeed
       return if type == :sti_type
 
       model.instance.assign_attributes(name => value)
+    rescue ArgumentError
+      nil
     end
 
     # returns a value matching type and validators
