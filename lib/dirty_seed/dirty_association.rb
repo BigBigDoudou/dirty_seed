@@ -19,14 +19,14 @@ module DirtySeed
 
     # validates and sets @dirty_model
     def dirty_model=(value)
-      raise ArgumentError unless value.is_a? DirtySeed::DirtyModel
+      raise ArgumentError unless value.nil? || value.is_a?(DirtySeed::DirtyModel)
 
       @dirty_model = value
     end
 
     # validates and sets @reflection
     def reflection=(value)
-      raise ArgumentError unless value.is_a? ActiveRecord::Reflection::BelongsToReflection
+      raise ArgumentError unless value.nil? || value.is_a?(ActiveRecord::Reflection::BelongsToReflection)
 
       @reflection = value
     end

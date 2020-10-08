@@ -17,7 +17,7 @@ module DirtySeed
 
     # validates and sets @models
     def models=(value)
-      raise ArgumentError unless value.is_a?(Array) && value.all? { |item| item < ::ApplicationRecord }
+      raise ArgumentError unless value.nil? || value.is_a?(Array) && value.all? { |item| item < ::ApplicationRecord }
 
       @models = value
     end

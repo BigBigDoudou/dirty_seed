@@ -19,14 +19,14 @@ module DirtySeed
 
     # validates and sets @dirty_model
     def dirty_model=(value)
-      raise ArgumentError unless value.is_a? DirtySeed::DirtyModel
+      raise ArgumentError unless value.nil? || value.is_a?(DirtySeed::DirtyModel)
 
       @dirty_model = value
     end
 
     # validates and sets @column
     def column=(value)
-      raise ArgumentError unless value.is_a? ActiveRecord::ConnectionAdapters::Column
+      raise ArgumentError unless value.nil? || value.is_a?(ActiveRecord::ConnectionAdapters::Column)
 
       @column = value
     end

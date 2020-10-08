@@ -17,7 +17,7 @@ module DirtySeed
 
     # validates and sets @model
     def model=(value)
-      raise ArgumentError unless value&.<(::ApplicationRecord)
+      raise ArgumentError unless value.nil? || (value < ::ApplicationRecord)
 
       @model = value
     end
