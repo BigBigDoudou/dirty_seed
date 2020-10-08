@@ -11,18 +11,19 @@ RSpec.describe DirtySeed::DirtyAssociation do
     context 'when arguments are valid' do
       it 'instantiates an instance' do
         expect(dirty_association).to be_a described_class
+        expect(described_class.new).to be_a described_class
       end
     end
 
     context 'when dirty_model is not a DirtySeed::DirtyModel' do
       it 'raises an ArgumentError' do
-        expect { described_class.new(dirty_model: Alfa, reflection: reflection) }.to raise_error ArgumentError
+        expect { described_class.new(dirty_model: Alfa) }.to raise_error ArgumentError
       end
     end
 
     context 'when reflection is not a ActiveRecord::Reflection::BelongsToReflection' do
       it 'raises an ArgumentError' do
-        expect { described_class.new(dirty_model: dirty_model, reflection: {}) }.to raise_error ArgumentError
+        expect { described_class.new(reflection: 42) }.to raise_error ArgumentError
       end
     end
   end
