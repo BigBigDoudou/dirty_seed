@@ -15,6 +15,7 @@ module DirtySeed
       @current = unsorted.first
     end
 
+    # validates and sets @models
     def models=(values)
       raise ArgumentError unless values.is_a?(Array) && values.all? { |value| value < ::ApplicationRecord }
 
