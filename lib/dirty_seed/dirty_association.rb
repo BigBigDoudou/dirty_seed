@@ -12,10 +12,23 @@ module DirtySeed
     # initializes an instance with:
     # - dirty_model: instance of DirtySeed::DirtyModel
     # - reflection: instance of ActiveRecord::Reflection::BelongsToReflection
-    def initialize(dirty_model:, reflection:)
-      @dirty_model = dirty_model
-      @reflection = reflection
-      validate_arguments!
+    def initialize(dirty_model: nil, reflection: nil)
+      self.dirty_model = dirty_model
+      self.reflection = reflection
+    end
+
+    # validates and sets @dirty_model
+    def dirty_model=(value)
+      raise ArgumentError unless value.is_a? DirtySeed::DirtyModel
+
+      @dirty_model = value
+    end
+
+    # validates and sets @reflection
+    def reflection=(value)
+      raise ArgumentError unless value.is_a? ActiveRecord::Reflection::BelongsToReflection
+
+      @reflection = value
     end
 
     # assigns a random instance to the association
@@ -96,14 +109,6 @@ module DirtySeed
           arm_reflection.options[:as]&.to_sym == name
         end
       end
-    end
-
-    # validates that arguments match expected types
-    def validate_arguments!
-      dirty_model.is_a?(DirtySeed::DirtyModel) ||
-        raise(ArgumentError, ':dirty_model should be a DirtySeed::DirtyModel instance')
-      reflection.is_a?(ActiveRecord::Reflection::BelongsToReflection) ||
-        raise(ArgumentError, ':reflection should be an ActiveRecord::Reflection::BelongsToReflection instance')
     end
   end
 end
