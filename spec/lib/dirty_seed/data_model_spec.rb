@@ -7,7 +7,7 @@ RSpec.describe DirtySeed::DataModel do
     context 'when ApplicationRecord is defined' do
       it 'seeds instances for each model' do
         described_class.seed
-        active_record_models.each do |active_record_model|
+        [Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India].each do |active_record_model|
           expect(active_record_model.count).to be > 0
         end
       end

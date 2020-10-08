@@ -17,8 +17,6 @@ require 'factory_bot_rails'
 require 'rspec/active_model/mocks'
 require 'rspec/rails'
 
-require 'spec_helper'
-
 # Load migrations from the dummy app.
 ActiveRecord::Migrator.migrations_paths = File.join(ENGINE_ROOT, 'spec/dummy/db/migrate')
 ActiveRecord::Migration.maintain_test_schema!

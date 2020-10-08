@@ -34,6 +34,7 @@ RSpec.describe DirtySeed::Sorter do
     end
 
     it 'sorts models by dependencies [3]' do
+      active_record_models = [Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India]
       10.times do
         sorted = DirtySeed::Sorter.new(models: active_record_models.shuffle).sort!
         expect(sorted.index(Alfa)).to be < sorted.index(Delta)
