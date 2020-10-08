@@ -54,8 +54,8 @@ module DirtySeed
     # returns attribute type
     def type
       return :sti_type if column.name == 'type'
-      return :float if column.name == 'decimal'
-      return :time if column.name == 'datetime'
+      return :float if column.sql_type_metadata.type == :decimal
+      return :time if column.sql_type_metadata.type == :datetime
 
       column.sql_type_metadata.type
     end
