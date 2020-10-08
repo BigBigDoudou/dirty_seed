@@ -36,7 +36,7 @@ module DirtySeed
     # seeds the database with dirty instances
     def seed
       # check if ApplicationRecord is defined first
-      ::ApplicationRecord && models.each(&:seed)
+      ::ApplicationRecord && 3.times { models.each(&:seed) }
       print_logs
     end
 

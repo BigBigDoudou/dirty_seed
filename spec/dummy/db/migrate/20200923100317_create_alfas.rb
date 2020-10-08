@@ -3,7 +3,7 @@ class CreateAlfas < ActiveRecord::Migration[6.0]
     create_table :alfas do |t|
       t.boolean :boolean
       t.integer :integer
-      t.decimal :decimal, null: false
+      t.decimal :decimal
       t.string :string
 
       t.timestamps

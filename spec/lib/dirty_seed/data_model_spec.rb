@@ -47,6 +47,7 @@ RSpec.describe DirtySeed::DataModel do
     it 'sorts models with associations' do
       expect(active_record_models.index(Alfa)).to be < active_record_models.index(Delta)
       expect(active_record_models.index(Alfa)).to be < active_record_models.index(Echo)
+      expect(active_record_models.index(Alfa)).to be < active_record_models.index(Juliet)
       expect(active_record_models.index(Charlie)).to be < active_record_models.index(Echo)
     end
   end

@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 2020_09_23_100336) do
   create_table "alfas", force: :cascade do |t|
     t.boolean "boolean"
     t.integer "integer"
-    t.decimal "decimal", null: false
+    t.decimal "decimal"
     t.string "string"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

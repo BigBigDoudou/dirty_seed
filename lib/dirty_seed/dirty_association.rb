@@ -44,9 +44,7 @@ module DirtySeed
     def value
       random_model = associated_models.sample
       random_id = random_model.pluck(:id).sample
-      random_model.find(random_id)
-    rescue ActiveRecord::RecordNotFound
-      nil
+      random_model.find_by(id: random_id)
     end
 
     # returns as String the reflection name
