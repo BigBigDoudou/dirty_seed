@@ -11,9 +11,15 @@ module DirtySeed
 
     # initializes an instance with:
     # - model: a class inheriting from ApplicationRecord
-    def initialize(model:)
-      @model = model
-      validate_arguments!
+    def initialize(model: nil)
+      self.model = model
+    end
+
+    # validates and sets @model
+    def model=(value)
+      raise ArgumentError, ':model should inherits from ApplicationRecord' unless value&.<(::ApplicationRecord)
+
+      @model = value
     end
 
     # returns an Array of ActiveRecord models
@@ -26,18 +32,16 @@ module DirtySeed
     # returns an Array of DirtyAssociations
     # representing the self.model belongs_to associations
     def associations
-      @associations ||=
-        included_reflections.map do |reflection|
-          DirtySeed::DirtyAssociation.new(dirty_model: self, reflection: reflection)
-        end
+      included_reflections.map do |reflection|
+        DirtySeed::DirtyAssociation.new(dirty_model: self, reflection: reflection)
+      end
     end
 
     # returns a Array of Strings representing the self.model attributes
     def attributes
-      @attributes ||=
-        included_columns.map do |column|
-          DirtySeed::DirtyAttribute.new(dirty_model: self, column: column)
-        end
+      included_columns.map do |column|
+        DirtySeed::DirtyAttribute.new(dirty_model: self, column: column)
+      end
     end
 
     # returns uniq errors
@@ -106,12 +110,6 @@ module DirtySeed
       model.reflections.values.select do |reflection|
         reflection.is_a? ActiveRecord::Reflection::BelongsToReflection
       end
-    end
-
-    # validates that arguments match expected types
-    def validate_arguments!
-      model < ::ApplicationRecord ||
-        raise(ArgumentError, ':model should inherits from ApplicationRecord')
     end
   end
 end
