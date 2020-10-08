@@ -5,17 +5,23 @@ require 'rails_helper'
 RSpec.describe DirtySeed::DirtyModel do
   let(:data_model) { DirtySeed::DataModel }
 
-  describe '#initialize' do
-    context 'when arguments are valid' do
+  describe '#initialize(model:)' do
+    context 'when <:model> inherits from ActiveRecord::Base' do
       it 'instantiates an instance' do
         expect(described_class.new(model: Alfa)).to be_a described_class
       end
     end
 
-    context 'when model does not inherit from ActiveRecord::Base' do
+    context 'when <:model> does not inherit from ActiveRecord::Base' do
       it 'raises an ArgumentError' do
         expect { described_class.new(model: Object) }.to raise_error ArgumentError
       end
+    end
+  end
+
+  describe '#seed(count)' do
+    it 'tries to create <count> instances of the model' do
+      expect { data_model.alfa.seed(3) }.to change { Alfa.count }.by(3)
     end
   end
 

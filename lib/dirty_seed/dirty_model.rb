@@ -16,35 +16,6 @@ module DirtySeed
       validate_arguments!
     end
 
-    # creates instances for each model
-    def seed
-      reset_info
-      5.times do |sequence|
-        @sequence = sequence
-        create_instance
-      end
-    end
-
-    # reset seed info
-    def reset_info
-      @seeded = 0
-      @errors = []
-    end
-
-    # creates an instance
-    def create_instance
-      instance = model.new
-      associations.each { |association| association.assign_value(instance) }
-      attributes.each { |attribute| attribute.assign_value(instance) }
-      if instance.save
-        @seeded += 1
-      else
-        @errors << instance.errors.full_messages
-      end
-    rescue ActiveRecord::ActiveRecordError => e
-      errors << e
-    end
-
     # returns an Array of ActiveRecord models
     # where models are associated to the current model
     # through a has_many or has_one associations
@@ -74,7 +45,36 @@ module DirtySeed
       @errors.flatten.uniq
     end
 
+    # creates instances for each model
+    def seed(count = 5)
+      reset_info
+      count.times do |sequence|
+        @sequence = sequence
+        create_instance
+      end
+    end
+
     private
+
+    # reset seed info
+    def reset_info
+      @seeded = 0
+      @errors = []
+    end
+
+    # creates an instance
+    def create_instance
+      instance = model.new
+      associations.each { |association| association.assign_value(instance) }
+      attributes.each { |attribute| attribute.assign_value(instance) }
+      if instance.save
+        @seeded += 1
+      else
+        @errors << instance.errors.full_messages
+      end
+    rescue ActiveRecord::ActiveRecordError => e
+      errors << e
+    end
 
     # returns an ActiveRecord::ConnectionAdapters::Columns array
     # that should be treated as regular attributes
