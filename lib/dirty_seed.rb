@@ -17,5 +17,7 @@ module DirtySeed
     autoload :DirtyInteger, 'dirty_seed/assigners/dirty_integer'
     autoload :DirtyFloat, 'dirty_seed/assigners/dirty_float'
     autoload :DirtyString, 'dirty_seed/assigners/dirty_string'
+    autoload :DirtyDate, 'dirty_seed/assigners/dirty_date'
+    autoload :DirtyTime, 'dirty_seed/assigners/dirty_time'
   end
 end

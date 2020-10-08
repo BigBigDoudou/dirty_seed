@@ -17,6 +17,9 @@ ActiveRecord::Schema.define(version: 2020_09_23_100336) do
     t.integer "integer"
     t.decimal "decimal"
     t.string "string"
+    t.date "date"
+    t.time "time"
+    t.datetime "datetime"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

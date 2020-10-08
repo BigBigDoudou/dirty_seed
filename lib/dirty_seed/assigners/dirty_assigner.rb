@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'faker'
+
 module DirtySeed
   module Assigners
     # draws a value matching validators

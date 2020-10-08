@@ -72,7 +72,7 @@ RSpec.describe DirtySeed::DirtyModel do
 
   describe '#attributes' do
     it 'defines attributes' do
-      expect(data_model.alfa.attributes.count).to eq 4
+      expect(data_model.alfa.attributes.count).to eq 7
       expect(data_model.bravo.attributes.count).to eq 4
       expect(data_model.charlie.attributes.count).to eq 0
       expect(data_model.delta.attributes.count).to eq 0

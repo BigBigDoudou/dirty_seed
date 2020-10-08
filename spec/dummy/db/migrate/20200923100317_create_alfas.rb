@@ -5,6 +5,9 @@ class CreateAlfas < ActiveRecord::Migration[6.0]
       t.integer :integer
       t.decimal :decimal
       t.string :string
+      t.date :date
+      t.time :time
+      t.datetime :datetime
 
       t.timestamps
     end

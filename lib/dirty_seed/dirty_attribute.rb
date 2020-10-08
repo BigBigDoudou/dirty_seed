@@ -43,12 +43,7 @@ module DirtySeed
 
     # returns a value matching type and validators
     def value
-      case type
-      when :boolean then dirty_boolean
-      when :integer then dirty_integer
-      when :float then dirty_float
-      when :string then dirty_string
-      end
+      __send__(:"dirty_#{type}")
     end
 
     # returns attribute name
@@ -60,6 +55,7 @@ module DirtySeed
     def type
       return :sti_type if column.name == 'type'
       return :float if column.name == 'decimal'
+      return :time if column.name == 'datetime'
 
       column.sql_type_metadata.type
     end
@@ -84,6 +80,16 @@ module DirtySeed
     # returns a String matching the validators
     def dirty_string
       Assigners::DirtyString.new(validators: validators, sequence: model.sequence).value
+    end
+
+    # returns a Date matching the validators
+    def dirty_date
+      Assigners::DirtyDate.new(validators: validators, sequence: model.sequence).value
+    end
+
+    # returns a Time matching the validators
+    def dirty_time
+      Assigners::DirtyTime.new(validators: validators, sequence: model.sequence).value
     end
 
     # returns an Array of ActiveModel::Validations::EachValidators
