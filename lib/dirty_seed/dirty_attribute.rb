@@ -43,7 +43,7 @@ module DirtySeed
 
     # returns a value matching type and validators
     def value
-      __send__(:"dirty_#{type}")
+      __send__(:"dirty_#{type}") if self.class.private_instance_methods(false).include? :"dirty_#{type}"
     end
 
     # returns attribute name
