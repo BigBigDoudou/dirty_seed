@@ -8,25 +8,28 @@ module DirtySeed
 
       # initializes an instance with:
       # - validators: Array of ActiveModel::Validation instances
+      # - sequence: Integer
       def initialize(validators: [], sequence: 0)
-        @validators = validators
-        @sequence = sequence
-        validate_arguments!
+        self.validators = validators
+        self.sequence = sequence
+      end
+
+      # validates and sets @validators
+      def validators=(value)
+        raise ArgumentError unless value.is_a?(Array) && value.all? { |item| item.is_a? ActiveModel::Validator }
+
+        @validators = value
+      end
+
+      # validates and sets @sequence
+      def sequence=(value)
+        raise ArgumentError unless value.is_a? Integer
+
+        @sequence = value
       end
 
       # returns a random value
       def value; end
-
-      private
-
-      # validates that arguments match expected types
-      def validate_arguments!
-        validators.is_a?(Array) && validators.all? { |validator| validator.is_a?(ActiveModel::Validator) } ||
-          raise(ArgumentError, 'each :validators should be an ActiveModel::Validation instances')
-
-        sequence.is_a?(Integer) ||
-          raise(ArgumentError, ':sequence should be an Integer')
-      end
     end
   end
 end

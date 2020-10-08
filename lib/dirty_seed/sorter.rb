@@ -16,10 +16,10 @@ module DirtySeed
     end
 
     # validates and sets @models
-    def models=(values)
-      raise ArgumentError unless values.is_a?(Array) && values.all? { |value| value < ::ApplicationRecord }
+    def models=(value)
+      raise ArgumentError unless value.is_a?(Array) && value.all? { |item| item < ::ApplicationRecord }
 
-      @models = values
+      @models = value
     end
 
     # sorts models depending on their associations
