@@ -36,8 +36,8 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Next features
 
-* Rely on Faker to define better values.
-* Analyze mor validations (min and max length, inclusion in array, etc.).
-* Read instance errors and use them to redefine valid values.
-* Improve the logger to return what have been created and what have failed.
-* Add a configuration file to define how many instances of each model to create, which models to skip, enforcing values...
+* Assign values for more data types (json, binary, etc.).
+* Integrate more validations (uniqueness, inclusion, length, absence, etc.).
+* Guess specific fields by name (email, password, etc.) and define adapted values.
+* Get instance errors back and use them to adjust values.
+* Add configuration so the client can define how to seed: number of instances, models to skip, default values, etc.
