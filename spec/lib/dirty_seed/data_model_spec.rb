@@ -29,14 +29,14 @@ RSpec.describe DirtySeed::DataModel do
 
   describe '::models' do
     it 'returns an array of dirty models representing Active Record models' do
-      expect(described_class.models.count).to eq 9
+      expect(described_class.models.count).to eq 10
     end
   end
 
   describe '::active_record_models' do
     let(:active_record_models) { described_class.active_record_models }
     it 'returns an array of Active Record models' do
-      expect(active_record_models.count).to eq 9
+      expect(active_record_models.count).to eq 10
     end
 
     it 'sorts models with associations' do
