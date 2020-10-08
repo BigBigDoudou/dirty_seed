@@ -12,10 +12,23 @@ module DirtySeed
     # initializes an instance with:
     # - dirty_model: instance of DirtySeed::DirtyModel
     # - column: ActiveRecord::ConnectionAdapters::Column
-    def initialize(dirty_model:, column:)
-      @dirty_model = dirty_model
-      @column = column
-      validate_arguments!
+    def initialize(dirty_model: nil, column: nil)
+      self.dirty_model = dirty_model
+      self.column = column
+    end
+
+    # validates and sets @dirty_model
+    def dirty_model=(value)
+      raise ArgumentError unless value.is_a? DirtySeed::DirtyModel
+
+      @dirty_model = value
+    end
+
+    # validates and sets @column
+    def column=(value)
+      raise ArgumentError unless value.is_a? ActiveRecord::ConnectionAdapters::Column
+
+      @column = value
     end
 
     # assigns an value to the attribute
@@ -79,14 +92,6 @@ module DirtySeed
       model.validators.select do |validator|
         validator.attributes.include? name
       end
-    end
-
-    # validates that arguments match expected types
-    def validate_arguments!
-      dirty_model.is_a?(DirtySeed::DirtyModel) ||
-        raise(ArgumentError, ':dirty_model should be a DirtySeed::DirtyModel instance')
-      column.is_a?(ActiveRecord::ConnectionAdapters::Column) ||
-        raise(ArgumentError, ':column should be an ActiveRecord::ConnectionAdapters::Column instance')
     end
   end
 end
