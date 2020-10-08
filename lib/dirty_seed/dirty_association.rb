@@ -19,12 +19,12 @@ module DirtySeed
     end
 
     # assigns a random instance to the association
-    def assign_value
+    def assign_value(instance)
       return if associated_models.empty?
 
-      model.instance.public_send(:"#{name}=", value)
-    rescue ArgumentError
-      nil
+      instance.public_send(:"#{name}=", value)
+    rescue ArgumentError => e
+      @errors << e
     end
 
     # returns a random instance matching the reflection

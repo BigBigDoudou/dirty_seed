@@ -19,13 +19,13 @@ module DirtySeed
     end
 
     # assigns an value to the attribute
-    def assign_value
+    def assign_value(instance)
       # type is automatically set by Model.new
       return if type == :sti_type
 
-      model.instance.assign_attributes(name => value)
-    rescue ArgumentError
-      nil
+      instance.assign_attributes(name => value)
+    rescue ArgumentError => e
+      model.errors << e
     end
 
     # returns a value matching type and validators

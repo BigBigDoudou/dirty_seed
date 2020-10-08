@@ -6,45 +6,43 @@ module DirtySeed
     extend ::DirtySeed::MethodMissingHelper
     forward_missing_methods_to :model
 
-    attr_reader :model, :instance, :sequence, :seeded
+    attr_reader :model, :sequence, :seeded
+    attr_writer :errors
 
     # initializes an instance with:
     # - model: a class inheriting from ApplicationRecord
     def initialize(model:)
       @model = model
       validate_arguments!
-
-      @count = 0
-      @errors = []
     end
 
     # creates instances for each model
     def seed
-      reset_logs
+      reset_info
       5.times do |sequence|
         @sequence = sequence
         create_instance
       end
     end
 
-    # reset seed logs
-    def reset_logs
+    # reset seed info
+    def reset_info
       @seeded = 0
       @errors = []
     end
 
     # creates an instance
     def create_instance
-      @instance = model.new
-      associations.each(&:assign_value)
-      attributes.each(&:assign_value)
+      instance = model.new
+      associations.each { |association| association.assign_value(instance) }
+      attributes.each { |attribute| attribute.assign_value(instance) }
       if instance.save
         @seeded += 1
       else
         @errors << instance.errors.full_messages
       end
     rescue ActiveRecord::ActiveRecordError => e
-      @errors << e
+      errors << e
     end
 
     # returns an Array of ActiveRecord models
