@@ -13,9 +13,11 @@ To seed dirty data, run:
 $ rake dirty_seed:seed
 ```
 
-This will try to create five instances for each of your models inheriting from `ApplicationRecord`.
+This will try to create instances for each of your models inheriting from `ApplicationRecord`.
 
 If the instance cannot be saved, it is simply ignored.
+
+Number of instances created and recurrent errors will be outputed.
 
 ## Installation
 
