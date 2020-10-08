@@ -3,17 +3,22 @@
 module DirtySeed
   # sorts ActiveRecord models depending on their associations
   class Sorter
-    attr_accessor :unsorted, :sorted, :checked, :current, :skip_optional
+    attr_reader :models, :sorted, :checked, :current, :skip_optional
+    alias unsorted models
 
     # initializes an instance with:
     # - models: array of models inheriting from ActiveRecord::Base
-    def initialize(models:)
-      @unsorted = models
-      validate_arguments!
+    def initialize(models: [])
+      self.models = models
+      @sorted = []
+      @checked = []
+      @current = unsorted.first
+    end
 
-      @sorted   = []
-      @checked  = []
-      @current  = unsorted.first
+    def models=(values)
+      raise ArgumentError unless values.is_a?(Array) && values.all? { |value| value < ::ApplicationRecord }
+
+      @models = values
     end
 
     # sorts models depending on their associations
@@ -108,12 +113,6 @@ module DirtySeed
       else
         model == reflection.klass
       end
-    end
-
-    # validates that arguments match expected types
-    def validate_arguments!
-      unsorted.is_a?(Array) && unsorted.all? { |model| model < ::ApplicationRecord } ||
-        raise(ArgumentError, 'each :models should inherits from ApplicationRecord')
     end
   end
 end
