@@ -16,4 +16,4 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 gem 'awesome_print'
-gem 'json', '>= 2.0.0'
+gem 'pry-rails'
