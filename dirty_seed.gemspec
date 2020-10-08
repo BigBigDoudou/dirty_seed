@@ -34,6 +34,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'awesome_print'
   spec.add_development_dependency 'database_cleaner'
   spec.add_development_dependency 'factory_bot_rails'
+  spec.add_development_dependency 'faker'
   spec.add_development_dependency 'rspec-activemodel-mocks'
   spec.add_development_dependency 'rspec-rails'
   spec.add_development_dependency 'simplecov'
