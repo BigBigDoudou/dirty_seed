@@ -52,13 +52,13 @@ module DirtySeed
     # returns as String the reflection name
     # e.g. foo
     def name
-      @name ||= reflection.name
+      reflection.name
     end
 
     # returns as Symbol the attribute containing the foreign key
     # e.g. foo_id
     def attribute
-      @attribute ||= :"#{name}_id"
+      :"#{name}_id"
     end
 
     # returns as Symbol the attribute containing the foreign type (for polymorphic associations)
@@ -67,12 +67,12 @@ module DirtySeed
     # and self.model == Bar
     # then it returns barable_type
     def type_key
-      @type_key ||= reflection.foreign_type&.to_sym
+      reflection.foreign_type&.to_sym
     end
 
     # returns @associated_models or defines it depending on the association type
     def associated_models
-      @associated_models ||= !polymorphic? ? regular_associations : polymorphic_associations
+      !polymorphic? ? regular_associations : polymorphic_associations
     end
 
     # returns true if the reflection is polymorphic
@@ -81,7 +81,7 @@ module DirtySeed
     # and self.model == Bar
     # then it returns true
     def polymorphic?
-      @polymorphic ||= reflection.options[:polymorphic]
+      reflection.options[:polymorphic]
     end
 
     private
