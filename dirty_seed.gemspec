@@ -29,14 +29,6 @@ Gem::Specification.new do |spec|
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
   spec.test_files = Dir['spec/**/*']
 
+  spec.add_dependency 'faker'
   spec.add_dependency 'rails', '~> 6.0.3', '>= 6.0.3.3'
-
-  spec.add_development_dependency 'awesome_print'
-  spec.add_development_dependency 'database_cleaner'
-  spec.add_development_dependency 'factory_bot_rails'
-  spec.add_development_dependency 'faker'
-  spec.add_development_dependency 'rspec-activemodel-mocks'
-  spec.add_development_dependency 'rspec-rails'
-  spec.add_development_dependency 'simplecov'
-  spec.add_development_dependency 'sqlite3'
 end

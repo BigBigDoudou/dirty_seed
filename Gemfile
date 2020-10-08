@@ -14,6 +14,12 @@ gemspec
 # your gem to rubygems.org.
 
 # To use a debugger
-# gem 'byebug', group: [:development, :test]
-gem 'awesome_print'
-gem 'pry-rails'
+group :test do
+  gem 'awesome_print'
+  gem 'database_cleaner'
+  gem 'factory_bot_rails'
+  gem 'pry-rails'
+  gem 'rspec-rails'
+  gem 'simplecov'
+  gem 'sqlite3'
+end

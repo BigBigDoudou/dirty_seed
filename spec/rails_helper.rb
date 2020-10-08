@@ -14,7 +14,6 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 
 require 'database_cleaner'
 require 'factory_bot_rails'
-require 'rspec/active_model/mocks'
 require 'rspec/rails'
 
 # Load migrations from the dummy app.
