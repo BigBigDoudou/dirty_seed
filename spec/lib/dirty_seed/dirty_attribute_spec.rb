@@ -3,26 +3,27 @@
 require 'rails_helper'
 
 RSpec.describe DirtySeed::DirtyAttribute do
-  let(:dirty_model) { DirtySeed::DirtyModel.new(model: Alfa) }
-  let(:column) { Alfa.columns.find { |c| c.name == 'boolean' } }
-  let(:dirty_attribute) { described_class.new(dirty_model: dirty_model, column: column) }
+  let(:sql_type) { ActiveRecord::ConnectionAdapters::SqlTypeMetadata.new(type: :boolean) }
+  let(:column) { ActiveRecord::ConnectionAdapters::Column.new('boolean', false, sql_type) }
+  let(:dirty_attribute) { described_class.new(dirty_model: DirtySeed::DirtyModel.new, column: column) }
 
   describe '#initialize' do
     context 'when arguments are valid' do
       it 'instantiates an instance' do
         expect(dirty_attribute).to be_a described_class
+        expect(described_class.new).to be_a described_class
       end
     end
 
     context 'when dirty_model is not a DirtySeed::DirtyModel' do
       it 'raises an ArgumentError' do
-        expect { described_class.new(dirty_model: Alfa, column: column) }.to raise_error ArgumentError
+        expect { described_class.new(dirty_model: Alfa) }.to raise_error ArgumentError
       end
     end
 
     context 'when column is not a ActiveRecord::ConnectionAdapters::Column' do
       it 'raises an ArgumentError' do
-        expect { described_class.new(dirty_model: dirty_model, column: {}) }.to raise_error ArgumentError
+        expect { described_class.new(column: 42) }.to raise_error ArgumentError
       end
     end
   end
