@@ -6,31 +6,35 @@ module DirtySeed
   module Assigners
     # Draws a value matching validators
     class DirtyAssigner
-      attr_reader :validators, :sequence
+      attr_reader :attribute
 
       # Initializes an instance
-      # @param validators [Array<ActiveModel::Validation instances>]
-      # @param sequence [Integer]
+      # @param attribute [DirtySeed::DirtyAttribute]
       # @return [DirtySeed::Assigners::DirtyAssigner]
-      def initialize(validators: [], sequence: 0)
-        self.validators = validators
-        self.sequence = sequence
+      def initialize(attribute: nil)
+        self.attribute = attribute
       end
 
-      # Validates and sets @validators
-      # @param value [Array<ActiveModel::Validator>]
-      def validators=(value)
-        raise ArgumentError unless value.is_a?(Array) && value.all? { |item| item.is_a? ActiveModel::Validator }
+      # Validates and sets @attribute
+      # @param value [DirtySeed::DirtyAttribute]
+      # @return [DirtySeed::DirtyAttribute]
+      # @raise [ArgumentError] if value is not valid
+      def attribute=(value)
+        raise ArgumentError unless value.nil? || value.is_a?(DirtySeed::DirtyAttribute)
 
-        @validators = value
+        @attribute = value
       end
 
-      # Validates and sets @sequence
-      # @param value [Integer]
-      def sequence=(value)
-        raise ArgumentError unless value.is_a? Integer
+      # Returns an validators related to the current attribute
+      # @return [Array<ActiveModel::Validations::EachValidators>]
+      def validators
+        attribute&.validators || []
+      end
 
-        @sequence = value
+      # Returns the current sequence
+      # @return [Integer]
+      def sequence
+        attribute&.sequence || 0
       end
 
       # Returns a random value

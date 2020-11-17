@@ -15,9 +15,7 @@ module DirtySeed
       # Returns an Integer matching all validators
       # @return [Integer]
       def integer
-        DirtySeed::Assigners::DirtyInteger.new(
-          validators: validators, sequence: sequence
-        ).value
+        DirtySeed::Assigners::DirtyInteger.new(attribute: attribute).value
       end
 
       # Returns a Float between 0 and 1
