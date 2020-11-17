@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DirtySeed
-  # represents an Active Record association
+  # Represents an Active Record association
   class DirtyAssociation
     extend ::DirtySeed::MethodMissingHelper
     forward_missing_methods_to :reflections
@@ -9,29 +9,38 @@ module DirtySeed
     attr_reader :dirty_model, :reflection
     alias model dirty_model
 
-    # initializes an instance with:
-    # - dirty_model: instance of DirtySeed::DirtyModel
-    # - reflection: instance of ActiveRecord::Reflection::BelongsToReflection
+    # Initializes an instance
+    # @param dirty_model [DirtySeed::DirtyModel]
+    # @param reflection [ActiveRecord::Reflection::BelongsToReflection]
+    # @return [DirtySeed::DirtyAssociation]
     def initialize(dirty_model: nil, reflection: nil)
       self.dirty_model = dirty_model
       self.reflection = reflection
     end
 
-    # validates and sets @dirty_model
+    # Validates and sets @dirty_model
+    # @param value [DirtySeed::DirtyModel]
+    # @return [DirtySeed::DirtyModel]
+    # @raise [ArgumentError] if value is not valid
     def dirty_model=(value)
       raise ArgumentError unless value.nil? || value.is_a?(DirtySeed::DirtyModel)
 
       @dirty_model = value
     end
 
-    # validates and sets @reflection
+    # Validates and sets @reflection
+    # @param value [ActiveRecord::Reflection::BelongsToReflection]
+    # @return [ActiveRecord::Reflection::BelongsToReflection]
+    # @raise [ArgumentError] if value is not valid
     def reflection=(value)
       raise ArgumentError unless value.nil? || value.is_a?(ActiveRecord::Reflection::BelongsToReflection)
 
       @reflection = value
     end
 
-    # assigns a random instance to the association
+    # Assigns a random value to the association
+    # @param instance [Object] an instance of a class inheriting from ApplicationRecord
+    # @return [void]
     def assign_value(instance)
       return if associated_models.empty?
 
@@ -40,67 +49,73 @@ module DirtySeed
       @errors << e
     end
 
-    # returns a random instance matching the reflection
+    # Returns a random instance matching the reflection
+    # @return [Object] an instance of a class inheriting from ApplicationRecord
     def value
       random_model = associated_models.sample
       random_id = random_model.pluck(:id).sample
       random_model.find_by(id: random_id)
     end
 
-    # returns as String the reflection name
-    # e.g. foo
+    # Returns the reflection name
+    # @return [String]
     def name
       reflection.name
     end
 
-    # returns as Symbol the attribute containing the foreign key
-    # e.g. foo_id
+    # Returns the attribute containing the foreign key
+    # @return [Symbol]
     def attribute
       :"#{name}_id"
     end
 
-    # returns as Symbol the attribute containing the foreign type (for polymorphic associations)
-    #
-    # given Bar.belongs_to(:barable, polymorphic: true)
-    # and self.model == Bar
-    # then it returns barable_type
+    # Returns the attribute containing the foreign type (for polymorphic associations)
+    # @example
+    #   Given Bar.belongs_to(:barable, polymorphic: true)
+    #   And self.model == Bar
+    #   Then it returns barable_type
+    # @return [Symbol]
     def type_key
       reflection.foreign_type&.to_sym
     end
 
-    # returns @associated_models or defines it depending on the association type
+    # Returns or defines associated_models
+    # @return [Array<Class>] a class inheriting from ApplicationRecord
     def associated_models
-      !polymorphic? ? regular_associations : polymorphic_associations
+      polymorphic? ? polymorphic_associations : regular_associations
     end
 
-    # returns true if the reflection is polymorphic
-    #
-    # given Bar.belongs_to(:barable, polymorphic: true)
-    # and self.model == Bar
-    # then it returns true
+    # Returns true if the reflection is polymorphic
+    # @example
+    #   Given Bar.belongs_to(:barable, polymorphic: true)
+    #   And self.model == Bar
+    #   Then it returns true
+    # @return [Boolean]
     def polymorphic?
       reflection.options[:polymorphic]
     end
 
     private
 
-    # returns an Array containing the reflected model
-    #
-    # given Bar.belongs_to(:foo)
-    # and Foo.has_many(:bars)
-    # and self.model == Bar
-    # then it returns [Foo]
+    # Returns the reflected models for a regular association
+    # @example
+    #   Given Bar.belongs_to(:foo)
+    #   And Foo.has_many(:bars)
+    #   And self.model == Bar
+    #   Then it returns [Foo]
+    # @return [Array<Class>] a class inheriting from ApplicationRecord
     def regular_associations
       [reflection.klass]
     end
 
-    # returns an Array containing all reflected models
-    #
-    # given Bar.belongs_to(:barable, polymorphic: true)
-    # and Foo.has_many(:bars, as: :barable)
-    # and Zed.has_many(:bars, as: :barable)
-    # and #model is Bar
-    # then it returns [Foo, Zed]
+    # Returns the reflected models for a polymorphic association
+    # @example
+    #   Given Bar.belongs_to(:barable, polymorphic: true)
+    #   And Foo.has_many(:bars, as: :barable)
+    #   And Zed.has_many(:bars, as: :barable)
+    #   And #model is Bar
+    #   Then it returns [Foo, Zed]
+    # @return [Array<Class>] a class inheriting from ApplicationRecord
     def polymorphic_associations
       DirtySeed::DataModel.active_record_models.select do |active_record_model|
         active_record_model.reflections.values.any? do |arm_reflection|

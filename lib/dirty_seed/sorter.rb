@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 module DirtySeed
-  # sorts ActiveRecord models depending on their associations
+  # Sorts ActiveRecord models depending on their associations
   class Sorter
     attr_reader :models, :sorted, :checked, :current, :skip_optional
     alias unsorted models
 
-    # initializes an instance with:
-    # - models: array of models inheriting from ActiveRecord::Base
+    # Initializes an instance
+    # @param models [Array<Class>] models inheriting from ActiveRecord::Base
+    # @return [DirtySeed::Sorter]
     def initialize(models: [])
       self.models = models
       @sorted = []
@@ -15,14 +16,18 @@ module DirtySeed
       @current = unsorted.first
     end
 
-    # validates and sets @models
+    # Validates and sets @models
+    # @param value [Array<Class>] classes inheriting from ActiveRecord::Base
+    # @return [Array<Class>] classes inheriting from ActiveRecord::Base
+    # @raise [ArgumentError] if value is not valid
     def models=(value)
       raise ArgumentError unless value.nil? || value.is_a?(Array) && value.all? { |item| item < ::ApplicationRecord }
 
       @models = value
     end
 
-    # sorts models depending on their associations
+    # Sorts models depending on their associations
+    # @return [Array<Class>] classes inheriting from ActiveRecord::Base
     def sort!
       return sorted if unsorted.empty?
 
@@ -35,20 +40,21 @@ module DirtySeed
 
     private
 
-    # defines the current model to be sorted
-    # and add it to the checked ones
+    # Defines the current model to be sorted and add it to the checked ones
+    # @return [Class] class inheriting from ActiveRecord::Base
     def set_current
       @current = unsorted.first
       checked << current
     end
 
-    # returns true if the current model has already been checked
-    # and skip optional option is not already activated
+    # Returns true if the current model has already been checked and skip optional option is not already activated
+    # @return [Boolean]
     def break_loop?
       current.in?(checked) && !skip_optional
     end
 
-    # activates skip_optional option to prevent infinite loop
+    # Activates skip_optional option to prevent infinite loop
+    # @return [void]
     def skip_optional!
       # if skip_optional is already true
       # there is an infinite loop of belongs_to associations
@@ -58,7 +64,8 @@ module DirtySeed
       @checked = []
     end
 
-    # chooses if current should be added to sorted ones or not
+    # Chooses if current should be added to sorted ones or not
+    # @return [void]
     def insert_or_rotate
       # if the current is dependent form a non-sorted model
       if dependent?
@@ -70,8 +77,8 @@ module DirtySeed
       end
     end
 
-    # returns false if there is only one model to sort
-    # else returns true if @current belongs_to a model that has not been sorted yet
+    # Returns true if @current belongs_to a model that has not been sorted yet
+    # @return [Boolean]
     def dependent?
       return false if unsorted.one?
 
@@ -83,29 +90,31 @@ module DirtySeed
       end
     end
 
-    # returns true if <relfection> is a :belongs_to kind
-    # reflection: ActiveRecord::Reflection::AssociationReflection
+    # Returns true if relfection is a :belongs_to kind
+    # @param reflection [ActiveRecord::Reflection::AssociationReflection]
+    # @return [Boolean]
     def belongs_to?(reflection)
       return false if reflection.options[:optional] && skip_optional
 
       reflection.is_a?(ActiveRecord::Reflection::BelongsToReflection)
     end
 
-    # returns true if <model> is or can be the <reflection> mirror
-    # model: ActiveRecord model
-    # reflection: ActiveRecord::Reflection::AssociationReflection
-    #
-    # Given `Foo.belongs_to(:bar)`
-    # And `Bar.has_many(:foos)`
-    # And <reflection> is the belongs_to reflection
-    # Then mirror?(Bar, reflection) returns true
-    #
-    # Given `Foo.belongs_to(:foable, polymorphic: true)`
-    # And `Bar.has_many(:foos, as: :foable)`
-    # And `Baz.has_many(:foos, as: :foable)`
-    # And <reflection> is the Foo "belongs_to" reflection
-    # Then mirror?(Bar, reflection) returns true
-    # And mirror?(Baz, reflection) returns true
+    # Returns true if model is or can be the <reflection> mirror
+    # @param model [ActiveRecord model]
+    # @param reflection [ActiveRecord::Reflection::AssociationReflection]
+    # @example
+    #   Given `Foo.belongs_to(:bar)`
+    #   And `Bar.has_many(:foos)`
+    #   And <reflection> is the belongs_to reflection
+    #   Then mirror?(Bar, reflection) returns true
+    # @example
+    #   Given `Foo.belongs_to(:foable, polymorphic: true)`
+    #   And `Bar.has_many(:foos, as: :foable)`
+    #   And `Baz.has_many(:foos, as: :foable)`
+    #   And <reflection> is the Foo "belongs_to" reflection
+    #   Then mirror?(Bar, reflection) returns true
+    #   And mirror?(Baz, reflection) returns true
+    # @return [Boolean]
     def mirror?(model, reflection)
       if reflection.options[:polymorphic]
         model.reflections.values.any? do |model_reflection|

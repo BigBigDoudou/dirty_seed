@@ -2,23 +2,26 @@
 
 module DirtySeed
   module Assigners
-    # draws an Float matching validators
+    # Draws an Float matching validators
     class DirtyFloat < DirtyAssigner
-      # returns a Float matching all validators
+      # Returns a float matching all validators
+      # @return [Float]
       def value
         integer + decimals
       end
 
       private
 
-      # returns an Integer matching all validators
+      # Returns an Integer matching all validators
+      # @return [Integer]
       def integer
         DirtySeed::Assigners::DirtyInteger.new(
           validators: validators, sequence: sequence
         ).value
       end
 
-      # returns a Float between 0 and 1
+      # Returns a Float between 0 and 1
+      # @return [Float]
       def decimals
         rand(0..Float(1))
       end

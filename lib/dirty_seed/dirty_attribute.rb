@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DirtySeed
-  # represents an Active Record attribute
+  # Represents an Active Record attribute
   class DirtyAttribute
     extend ::DirtySeed::MethodMissingHelper
     forward_missing_methods_to :column
@@ -9,29 +9,37 @@ module DirtySeed
     attr_reader :dirty_model, :column
     alias model dirty_model
 
-    # initializes an instance with:
-    # - dirty_model: instance of DirtySeed::DirtyModel
-    # - column: ActiveRecord::ConnectionAdapters::Column
+    # Initializes an instance
+    # @param dirty_model [DirtySeed::DirtyModel]
+    # @param column [ActiveRecord::ConnectionAdapters::Column]
+    # @return [DirtySeed::DirtyAttribute]
     def initialize(dirty_model: nil, column: nil)
       self.dirty_model = dirty_model
       self.column = column
     end
 
-    # validates and sets @dirty_model
+    # Validates and sets @dirty_model
+    # @param value [DirtySeed::DirtyModel]
+    # @return [DirtySeed::DirtyModel]
+    # @raise [ArgumentError] if value is not valid
     def dirty_model=(value)
       raise ArgumentError unless value.nil? || value.is_a?(DirtySeed::DirtyModel)
 
       @dirty_model = value
     end
 
-    # validates and sets @column
+    # Validates and sets @column
+    # @param value [ActiveRecord::ConnectionAdapters::Column]
+    # @return [ActiveRecord::ConnectionAdapters::Column]
+    # @raise [ArgumentError] if value is not valid
     def column=(value)
       raise ArgumentError unless value.nil? || value.is_a?(ActiveRecord::ConnectionAdapters::Column)
 
       @column = value
     end
 
-    # assigns an value to the attribute
+    # Assigns a value to the attribute
+    # @return [void]
     def assign_value(instance)
       # type is automatically set by Model.new
       return if type == :sti_type
@@ -41,17 +49,20 @@ module DirtySeed
       model.errors << e
     end
 
-    # returns a value matching type and validators
+    # Returns a value matching type and validators
+    # @return [Object]
     def value
       __send__(:"dirty_#{type}") if self.class.private_instance_methods(false).include? :"dirty_#{type}"
     end
 
-    # returns attribute name
+    # Returns attribute name
+    # @return [Symbol]
     def name
       column.name.to_sym
     end
 
-    # returns attribute type
+    # Returns attribute type
+    # @return [Symbol]
     def type
       return :sti_type if column.name == 'type'
       return :float if column.sql_type_metadata.type == :decimal
@@ -62,38 +73,44 @@ module DirtySeed
 
     private
 
-    # returns a Boolean matching the validators
+    # Returns a boolean matching the validators
+    # @return [Boolean]
     def dirty_boolean
       Assigners::DirtyBoolean.new(validators: validators).value
     end
 
-    # returns an Integer matching the validators
+    # Returns an integer matching the validators
+    # @return [Integer]
     def dirty_integer
       Assigners::DirtyInteger.new(validators: validators, sequence: model.sequence).value
     end
 
-    # returns a Float matching the validators
+    # Returns a float matching the validators
+    # @return [Float]
     def dirty_float
       Assigners::DirtyFloat.new(validators: validators, sequence: model.sequence).value
     end
 
-    # returns a String matching the validators
+    # Returns a string matching the validators
+    # @return [String]
     def dirty_string
       Assigners::DirtyString.new(validators: validators, sequence: model.sequence).value
     end
 
-    # returns a Date matching the validators
+    # Returns a date matching the validators
+    # @return [Date]
     def dirty_date
       Assigners::DirtyDate.new(validators: validators, sequence: model.sequence).value
     end
 
-    # returns a Time matching the validators
+    # Returns a time matching the validators
+    # @return [Time]
     def dirty_time
       Assigners::DirtyTime.new(validators: validators, sequence: model.sequence).value
     end
 
-    # returns an Array of ActiveModel::Validations::EachValidators
-    # related to the current attribute
+    # Returns an validators related to the current attribute
+    # @return [Array<ActiveModel::Validations::EachValidators>]
     def validators
       model.validators.select do |validator|
         validator.attributes.include? name

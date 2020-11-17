@@ -2,9 +2,10 @@
 
 module DirtySeed
   module Assigners
-    # draws a String matching validators
+    # Draws a String matching validators
     class DirtyString < DirtyAssigner
-      # returns a String matching all validators
+      # Returns a string matching all validators
+      # @return [String]
       def value
         ::Faker::Lorem.sentence(word_count: 3 + sequence % 2)
       end
