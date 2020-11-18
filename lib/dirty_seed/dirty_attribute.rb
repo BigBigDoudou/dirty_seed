@@ -29,10 +29,11 @@ module DirtySeed
 
     # Returns a value matching type and validators
     # @param sequence [Integer]
-    # @return [Object]
+    # @return [Object, nil]
     def value(sequence)
       assigner = "DirtySeed::Assigners::Dirty#{type.capitalize}".constantize
       assigner.new(self, sequence).value
+    # If attribute type is not currently handled (json, array...) return nil
     rescue NameError
       nil
     end

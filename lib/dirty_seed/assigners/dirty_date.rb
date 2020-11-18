@@ -7,7 +7,7 @@ module DirtySeed
       # Returns a date matching all validators
       # @return [Date]
       def value
-        ::Faker::Date.between(from: 2.years.ago, to: 2.years.from_now)
+        ::Faker::Date.between(from: 42.days.ago, to: 42.days.from_now)
       end
     end
   end

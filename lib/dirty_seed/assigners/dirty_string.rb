@@ -32,9 +32,17 @@ module DirtySeed
 
       # Returns a string matching all validators
       # @return [String]
+      # @note First try to guess attribute meaning by its name and use Faker to return a coherent value
       def value
-        SPECIFIC_ATTRIBUTES[dirty_attribute.name]&.call ||
-          ::Faker::Lorem.unique.sentence(word_count: 3, supplemental: false, random_words_to_add: 4)
+        SPECIFIC_ATTRIBUTES[dirty_attribute.name]&.call || default
+      end
+
+      private
+
+      # Returns a standard string
+      # @return [String]
+      def default
+        ::Faker::Lorem.unique.sentence(word_count: 3, supplemental: false, random_words_to_add: 4)
       end
     end
   end
