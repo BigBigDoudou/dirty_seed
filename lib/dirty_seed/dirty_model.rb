@@ -6,8 +6,20 @@ module DirtySeed
     extend ::DirtySeed::MethodMissingHelper
     forward_missing_methods_to :model
 
-    attr_reader :model, :sequence, :seeded
+    attr_reader :model, :seeded
     attr_writer :errors
+
+    PROTECTED_COLUMNS = %w[
+      id
+      type
+      created_at
+      updated_at
+      encrypted_password
+      reset_password_token
+      reset_password_sent_at
+      remember_created_at
+    ].freeze
+    private_constant :PROTECTED_COLUMNS
 
     # Initializes an instance
     # @param model [Class] a class inheriting from ApplicationRecord
@@ -50,8 +62,7 @@ module DirtySeed
     def seed(count = 5)
       reset_info
       count.times do |sequence|
-        @sequence = sequence
-        create_instance
+        create_instance(sequence)
       end
     end
 
@@ -65,11 +76,12 @@ module DirtySeed
     end
 
     # Creates an instance
+    # @param sequence [Integer]
     # @return [void]
-    def create_instance
+    def create_instance(sequence)
       instance = model.new
       associations.each { |association| association.assign_value(instance) }
-      attributes.each { |attribute| attribute.assign_value(instance) }
+      attributes.each { |attribute| attribute.assign_value(instance, sequence) }
       if instance.save
         @seeded += 1
       else
@@ -82,16 +94,10 @@ module DirtySeed
     # Returns columns that should be treated as regular attributes
     # @return [Array<ActiveRecord::ConnectionAdapters::Column>]
     def included_columns
-      excluded = excluded_attributes + reflection_related_attributes
+      excluded = PROTECTED_COLUMNS + reflection_related_attributes
       model.columns.reject do |column|
         column.name.in? excluded
       end
-    end
-
-    # Returns default excluded attributes
-    # @return [Array<String>]
-    def excluded_attributes
-      %w[id created_at updated_at]
     end
 
     # Returns attributes related to an association

@@ -7,7 +7,7 @@ RSpec.describe DirtySeed::Assigners::DirtyBoolean do
 
   describe '#value' do
     it 'returns a Boolean' do
-      expect([true, false]).to include described_class.new(dirty_attribute).value
+      expect([true, false]).to include described_class.new(dirty_attribute, 0).value
     end
   end
 end

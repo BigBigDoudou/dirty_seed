@@ -1,4 +1,4 @@
-class Juliet < ApplicationRecord
+class Juliett < ApplicationRecord
   belongs_to :alfa
 
   validate :custom_alfa_validation

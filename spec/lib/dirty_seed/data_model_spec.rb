@@ -7,7 +7,8 @@ RSpec.describe DirtySeed::DataModel do
     context 'when ApplicationRecord is defined' do
       it 'seeds instances for each model' do
         described_class.seed
-        [Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India].each do |active_record_model|
+        # As expected, Juliett can not be seed
+        [Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India, Kilo].each do |active_record_model|
           expect(active_record_model.count).to be > 0
         end
       end
@@ -21,7 +22,7 @@ RSpec.describe DirtySeed::DataModel do
     end
   end
 
-  describe '::print_logs' do
+  xdescribe '::print_logs' do
     it 'prints logs in the console' do
       described_class.seed
     end
@@ -30,7 +31,7 @@ RSpec.describe DirtySeed::DataModel do
   describe '::models' do
     it 'returns an array of dirty models representing Active Record models' do
       expect(described_class.models.map(&:name)).to match_array(
-        %w[Alfa Bravo Charlie Delta Echo Foxtrot Golf Hotel India Juliet]
+        %w[Alfa Bravo Charlie Delta Echo Foxtrot Golf Hotel India Juliett Kilo]
       )
     end
   end
@@ -40,14 +41,14 @@ RSpec.describe DirtySeed::DataModel do
 
     it 'returns an array of Active Record models' do
       expect(active_record_models).to match_array(
-        [Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India, Juliet]
+        [Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India, Juliett, Kilo]
       )
     end
 
     it 'sorts models with associations' do
       expect(active_record_models.index(Alfa)).to be < active_record_models.index(Delta)
       expect(active_record_models.index(Alfa)).to be < active_record_models.index(Echo)
-      expect(active_record_models.index(Alfa)).to be < active_record_models.index(Juliet)
+      expect(active_record_models.index(Alfa)).to be < active_record_models.index(Juliett)
       expect(active_record_models.index(Charlie)).to be < active_record_models.index(Echo)
     end
   end

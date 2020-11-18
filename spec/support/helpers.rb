@@ -15,14 +15,16 @@ def build_dirty_attribute(name: nil, dirty_model: nil, type: :boolean)
   )
 end
 
+def build_dirty_model(model: Alfa)
+  DirtySeed::DirtyModel.new(model)
+end
+
+private
+
 def sql_type(type)
   case type
   when :float then :decimal
   when :time then :datetime
   else type
   end
-end
-
-def build_dirty_model
-  DirtySeed::DirtyModel.new(Alfa)
 end

@@ -45,12 +45,5 @@ RSpec.describe DirtySeed::DirtyAttribute do
         expect(dirty_attribute.type).to eq :string
       end
     end
-
-    context 'when column is a sti type' do
-      it 'returns :string' do
-        dirty_attribute = described_class.new(build_dirty_model, build_column(name: 'type', type: :string))
-        expect(dirty_attribute.type).to eq :sti_type
-      end
-    end
   end
 end

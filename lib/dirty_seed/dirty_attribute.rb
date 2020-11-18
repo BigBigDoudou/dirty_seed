@@ -8,8 +8,6 @@ module DirtySeed
 
     attr_reader :dirty_model, :column
 
-    delegate :sequence, to: :dirty_model
-
     # Initializes an instance
     # @param dirty_model [DirtySeed::DirtyModel]
     # @param column [ActiveRecord::ConnectionAdapters::Column]
@@ -20,21 +18,23 @@ module DirtySeed
     end
 
     # Assigns a value to the attribute
+    # @param instance [Object] an instance of a class inheriting from ApplicationRecord
+    # @param sequence [Integer]
     # @return [void]
-    def assign_value(instance)
-      # type is automatically set by Model.new
-      return if type == :sti_type
-
-      instance.assign_attributes(name => value)
+    def assign_value(instance, sequence)
+      instance.assign_attributes(name => value(sequence))
     rescue ArgumentError => e
-      model.errors << e
+      dirty_model.errors << e
     end
 
     # Returns a value matching type and validators
+    # @param sequence [Integer]
     # @return [Object]
-    def value
+    def value(sequence)
       assigner = "DirtySeed::Assigners::Dirty#{type.capitalize}".constantize
-      assigner.new(self).value
+      assigner.new(self, sequence).value
+    rescue NameError
+      nil
     end
 
     # Returns attribute name
@@ -46,7 +46,6 @@ module DirtySeed
     # Returns attribute type
     # @return [Symbol]
     def type
-      return :sti_type if column.name == 'type'
       return :float if column.sql_type_metadata.type == :decimal
       return :time if column.sql_type_metadata.type == :datetime
 
