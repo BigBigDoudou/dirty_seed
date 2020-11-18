@@ -3,26 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe DirtySeed::Assigners::DirtyAssigner do
-  let(:attribute) do
-    DirtySeed::DirtyAttribute.new(
-      column: ActiveRecord::ConnectionAdapters::Column.new(
-        'boolean',
-        false,
-        ActiveRecord::ConnectionAdapters::SqlTypeMetadata.new(type: :boolean)
-      )
-    )
-  end
+  let(:dirty_attribute) { build_dirty_attribute }
 
   describe '#initialize' do
-    context 'when arguments are valid' do
+    context 'when attribute is provided' do
       it 'instantiates an instance' do
-        expect(described_class.new(attribute: attribute)).to be_a described_class
+        expect(described_class.new(dirty_attribute)).to be_a described_class
       end
     end
 
-    context 'when model does not inherit from ActiveRecord::Base' do
+    context 'when attribute is not provided' do
       it 'raises an ArgumentError' do
-        expect { described_class.new(attribute: Object) }.to raise_error ArgumentError
+        expect { described_class.new }.to raise_error ArgumentError
       end
     end
   end

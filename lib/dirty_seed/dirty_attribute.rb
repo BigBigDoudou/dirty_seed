@@ -7,37 +7,16 @@ module DirtySeed
     forward_missing_methods_to :column
 
     attr_reader :dirty_model, :column
-    alias model dirty_model
 
-    delegate :sequence, to: :model
+    delegate :sequence, to: :dirty_model
 
     # Initializes an instance
     # @param dirty_model [DirtySeed::DirtyModel]
     # @param column [ActiveRecord::ConnectionAdapters::Column]
     # @return [DirtySeed::DirtyAttribute]
-    def initialize(dirty_model: nil, column: nil)
-      self.dirty_model = dirty_model
-      self.column = column
-    end
-
-    # Validates and sets @dirty_model
-    # @param value [DirtySeed::DirtyModel]
-    # @return [DirtySeed::DirtyModel]
-    # @raise [ArgumentError] if value is not valid
-    def dirty_model=(value)
-      raise ArgumentError unless value.nil? || value.is_a?(DirtySeed::DirtyModel)
-
-      @dirty_model = value
-    end
-
-    # Validates and sets @column
-    # @param value [ActiveRecord::ConnectionAdapters::Column]
-    # @return [ActiveRecord::ConnectionAdapters::Column]
-    # @raise [ArgumentError] if value is not valid
-    def column=(value)
-      raise ArgumentError unless value.nil? || value.is_a?(ActiveRecord::ConnectionAdapters::Column)
-
-      @column = value
+    def initialize(dirty_model, column)
+      @dirty_model = dirty_model
+      @column = column
     end
 
     # Assigns a value to the attribute
@@ -55,7 +34,7 @@ module DirtySeed
     # @return [Object]
     def value
       assigner = "DirtySeed::Assigners::Dirty#{type.capitalize}".constantize
-      assigner.new(attribute: self).value
+      assigner.new(self).value
     end
 
     # Returns attribute name
@@ -77,7 +56,7 @@ module DirtySeed
     # Returns an validators related to the current attribute
     # @return [Array<ActiveModel::Validations::EachValidators>]
     def validators
-      model.validators.select do |validator|
+      dirty_model.validators.select do |validator|
         validator.attributes.include? name
       end
     end

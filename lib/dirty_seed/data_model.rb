@@ -50,7 +50,7 @@ module DirtySeed
     def models
       @models ||=
         active_record_models.map do |active_record_model|
-          DirtySeed::DirtyModel.new(model: active_record_model)
+          DirtySeed::DirtyModel.new(active_record_model)
         end
     end
 
@@ -58,7 +58,7 @@ module DirtySeed
     # @return [Array<Class>] a class inheriting from ApplicationRecord
     def active_record_models
       @active_record_models ||=
-        DirtySeed::Sorter.new(models: unsorted_active_record_models).sort!
+        DirtySeed::Sorter.new(unsorted_active_record_models).sort!
     end
 
     # Returns an ApplicationRecord inherited classes

@@ -3,16 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe DirtySeed::Assigners::DirtyFloat do
+  let(:dirty_attribute) { build_dirty_attribute(type: :float) }
+
   describe '#value' do
     context 'when there are no validators' do
       it 'returns an integer' do
-        expect(described_class.new.value).to be_a Float
+        expect(described_class.new(dirty_attribute).value).to be_a Float
       end
     end
 
     context 'when there is greater_than validator' do
       it 'returns an integer greater than the requirement' do
-        assigner = described_class.new
+        assigner = described_class.new(dirty_attribute)
         validator = ActiveModel::Validations::NumericalityValidator.new(attributes: :fake, greater_than: 1_000)
         allow_any_instance_of(DirtySeed::Assigners::DirtyInteger).to receive(:validators).and_return([validator])
         10.times { expect(assigner.value).to be >= 1_000 }
@@ -21,7 +23,7 @@ RSpec.describe DirtySeed::Assigners::DirtyFloat do
 
     context 'when there is less_than validator' do
       it 'returns an integer less than the requirement' do
-        assigner = described_class.new
+        assigner = described_class.new(dirty_attribute)
         validator = ActiveModel::Validations::NumericalityValidator.new(attributes: :fake, less_than: -1_000)
         allow_any_instance_of(DirtySeed::Assigners::DirtyInteger).to receive(:validators).and_return([validator])
         10.times { expect(assigner.value).to be < -1_000 }
@@ -34,7 +36,7 @@ RSpec.describe DirtySeed::Assigners::DirtyFloat do
         less_than = ActiveModel::Validations::NumericalityValidator.new(attributes: :fake, less_than: 5)
         # greater_than = set_validator(type: :greater_than, value: 1)
         # less_than = set_validator(type: :less_than, value: 5)
-        assigner = described_class.new
+        assigner = described_class.new(dirty_attribute)
         allow_any_instance_of(DirtySeed::Assigners::DirtyInteger).to(
           receive(:validators).and_return([greater_than, less_than])
         )

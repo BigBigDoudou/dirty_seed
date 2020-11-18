@@ -9,21 +9,11 @@ module DirtySeed
     # Initializes an instance
     # @param models [Array<Class>] models inheriting from ActiveRecord::Base
     # @return [DirtySeed::Sorter]
-    def initialize(models: [])
-      self.models = models
+    def initialize(models = [])
+      @models = models
       @sorted = []
       @checked = []
       @current = unsorted.first
-    end
-
-    # Validates and sets @models
-    # @param value [Array<Class>] classes inheriting from ActiveRecord::Base
-    # @return [Array<Class>] classes inheriting from ActiveRecord::Base
-    # @raise [ArgumentError] if value is not valid
-    def models=(value)
-      raise ArgumentError unless value.nil? || value.is_a?(Array) && value.all? { |item| item < ::ApplicationRecord }
-
-      @models = value
     end
 
     # Sorts models depending on their associations

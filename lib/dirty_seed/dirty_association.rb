@@ -7,35 +7,14 @@ module DirtySeed
     forward_missing_methods_to :reflections
 
     attr_reader :dirty_model, :reflection
-    alias model dirty_model
 
     # Initializes an instance
     # @param dirty_model [DirtySeed::DirtyModel]
     # @param reflection [ActiveRecord::Reflection::BelongsToReflection]
     # @return [DirtySeed::DirtyAssociation]
-    def initialize(dirty_model: nil, reflection: nil)
-      self.dirty_model = dirty_model
-      self.reflection = reflection
-    end
-
-    # Validates and sets @dirty_model
-    # @param value [DirtySeed::DirtyModel]
-    # @return [DirtySeed::DirtyModel]
-    # @raise [ArgumentError] if value is not valid
-    def dirty_model=(value)
-      raise ArgumentError unless value.nil? || value.is_a?(DirtySeed::DirtyModel)
-
-      @dirty_model = value
-    end
-
-    # Validates and sets @reflection
-    # @param value [ActiveRecord::Reflection::BelongsToReflection]
-    # @return [ActiveRecord::Reflection::BelongsToReflection]
-    # @raise [ArgumentError] if value is not valid
-    def reflection=(value)
-      raise ArgumentError unless value.nil? || value.is_a?(ActiveRecord::Reflection::BelongsToReflection)
-
-      @reflection = value
+    def initialize(dirty_model, reflection)
+      @dirty_model = dirty_model
+      @reflection = reflection
     end
 
     # Assigns a random value to the association

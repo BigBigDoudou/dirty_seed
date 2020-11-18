@@ -12,18 +12,8 @@ module DirtySeed
     # Initializes an instance
     # @param model [Class] a class inheriting from ApplicationRecord
     # @return [DirtySeed::DirtyModel]
-    def initialize(model: nil)
-      self.model = model
-    end
-
-    # Validates and sets @model
-    # @param value [Class, nil] a class inheriting from ApplicationRecord
-    # @return [Class] a class inheriting from ApplicationRecord
-    # @raise [ArgumentError] if value is not valid
-    def model=(value)
-      raise ArgumentError unless value.nil? || (value < ::ApplicationRecord)
-
-      @model = value
+    def initialize(model)
+      @model = model
     end
 
     # Returns models where models are associated to the current model through a has_many or has_one associations
@@ -36,7 +26,7 @@ module DirtySeed
     # @return [Array<DirtySeed::DirtyAssociation>]
     def associations
       included_reflections.map do |reflection|
-        DirtySeed::DirtyAssociation.new(dirty_model: self, reflection: reflection)
+        DirtySeed::DirtyAssociation.new(self, reflection)
       end
     end
 
@@ -44,7 +34,7 @@ module DirtySeed
     # @return [Array<String>]
     def attributes
       included_columns.map do |column|
-        DirtySeed::DirtyAttribute.new(dirty_model: self, column: column)
+        DirtySeed::DirtyAttribute.new(self, column)
       end
     end
 
