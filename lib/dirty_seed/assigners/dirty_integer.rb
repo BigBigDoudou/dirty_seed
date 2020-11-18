@@ -2,11 +2,12 @@
 
 module DirtySeed
   module Assigners
-    # draws an integer matching validators
+    # Draws an integer matching validators
     class DirtyInteger < DirtyAssigner
       attr_reader :min, :max
 
-      # returns an Integer matching all validators
+      # Returns an integer matching all validators
+      # @return [Integer]
       def value
         define_min_and_max
         adjust_values
@@ -15,7 +16,8 @@ module DirtySeed
 
       private
 
-      # sets @min and @max if not already set
+      # Sets @min and @max if not already set
+      # @return [void]
       def adjust_values
         return if @min && @max
 
@@ -29,12 +31,14 @@ module DirtySeed
         end
       end
 
-      # returns a random Integer
+      # Returns a random integer
+      # @return [Integer]
       def random
         rand(sequence..42)
       end
 
-      # defines @min and @max based on each validator
+      # Defines @min and @max based on each validator
+      # @return [void]
       def define_min_and_max
         validators.each do |validator|
           adjust_min!(validator)
@@ -42,32 +46,36 @@ module DirtySeed
         end
       end
 
-      # sets or updates @min so it matches validator
-      # - validator: ActiveModel::Validations::EachValidator
+      # Sets or updates @min so it matches validator
+      # @param validator [ActiveModel::Validations::EachValidator]
+      # @return [Integer, nil]
       def adjust_min!(validator)
         return unless min_for(validator)
 
         @min = min_for(validator) if @min.nil? || min_for(validator) > @min
       end
 
-      # sets or updates @max so it matches validator
-      # - validator: ActiveModel::Validations::EachValidator
+      # Sets or updates @max so it matches validator
+      # @param validator [ActiveModel::Validations::EachValidator]
+      # @return [Integer, nil]
       def adjust_max!(validator)
         return unless max_for(validator)
 
         @max = max_for(validator) if @max.nil? || max_for(validator) < @max
       end
 
-      # return an Integer representing the minimal acceptable value
-      # - validator: ActiveModel::Validations::EachValidator
+      # Returns an integer representing the minimal acceptable value
+      # @param validator [ActiveModel::Validations::EachValidator]
+      # @return [Integer]
       def min_for(validator)
         validator.options[:greater_than]&.+(1) ||
           validator.options[:greater_than_or_equal_to] ||
           validator.options[:in]&.min
       end
 
-      # return an Integer representing the maximal acceptable value
-      # - validator: ActiveModel::Validations::EachValidator
+      # Returns an integer representing the maximal acceptable value
+      # @param validator [ActiveModel::Validations::EachValidator]
+      # @return [Integer]
       def max_for(validator)
         validator.options[:less_than]&.-(1) ||
           validator.options[:less_than_or_equal_to] ||

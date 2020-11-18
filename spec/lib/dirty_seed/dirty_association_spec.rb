@@ -5,38 +5,17 @@ require 'rails_helper'
 RSpec.describe DirtySeed::DirtyAssociation do
   let(:dirty_model)       { DirtySeed::DataModel.charlie }
   let(:reflection)        { Charlie.reflections['alfa'] }
-  let(:dirty_association) { described_class.new(dirty_model: dirty_model, reflection: reflection) }
+  let(:dirty_association) { described_class.new(dirty_model, reflection) }
 
   describe '#initialize' do
-    context 'when arguments are valid' do
-      it 'instantiates an instance' do
-        expect(dirty_association).to be_a described_class
-        expect(described_class.new).to be_a described_class
-      end
-    end
-
-    context 'when dirty_model is not a DirtySeed::DirtyModel' do
-      it 'raises an ArgumentError' do
-        expect { described_class.new(dirty_model: Alfa) }.to raise_error ArgumentError
-      end
-    end
-
-    context 'when reflection is not a ActiveRecord::Reflection::BelongsToReflection' do
-      it 'raises an ArgumentError' do
-        expect { described_class.new(reflection: 42) }.to raise_error ArgumentError
-      end
+    it 'instantiates an instance' do
+      expect(dirty_association).to be_a described_class
     end
   end
 
   describe '#dirty_model' do
     it 'returns dirty model' do
       expect(dirty_association.dirty_model).to eq dirty_model
-    end
-  end
-
-  describe '#model' do
-    it 'returns dirty model' do
-      expect(dirty_association.model).to eq dirty_model
     end
   end
 
@@ -61,26 +40,23 @@ RSpec.describe DirtySeed::DirtyAssociation do
 
     context 'when the reflection is polymorphic' do
       it 'returns models associated with has_many or has_one' do
-        dirty_association = described_class.new(
-          dirty_model: DirtySeed::DataModel.echo,
-          reflection: Echo.reflections['echoable']
-        )
+        dirty_model = DirtySeed::DataModel.echo
+        reflection = Echo.reflections['echoable']
+        dirty_association = described_class.new(dirty_model, reflection)
         expect(dirty_association.associated_models).to eq [Alfa, Charlie]
       end
     end
 
     context 'when the reflection is cyclic (a belongs to b and b optionnally belongs to a)' do
       it 'returns models accepting this one as polymorphic' do
-        dirty_association = described_class.new(
-          dirty_model: DirtySeed::DataModel.hotel,
-          reflection: Hotel.reflections['india']
-        )
+        dirty_model = DirtySeed::DataModel.hotel
+        reflection = Hotel.reflections['india']
+        dirty_association = described_class.new(dirty_model, reflection)
         expect(dirty_association.associated_models).to eq [India]
 
-        dirty_association = described_class.new(
-          dirty_model: DirtySeed::DataModel.india,
-          reflection: India.reflections['hotel']
-        )
+        dirty_model = DirtySeed::DataModel.india
+        reflection = India.reflections['hotel']
+        dirty_association = described_class.new(dirty_model, reflection)
         expect(dirty_association.associated_models).to eq [Hotel]
       end
     end

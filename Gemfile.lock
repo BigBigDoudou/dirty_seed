@@ -3,7 +3,7 @@ PATH
   specs:
     dirty_seed (0.1.3)
       faker
-      rails (~> 6.0.3, >= 6.0.3.3)
+      rails (>= 5.2)
 
 GEM
   remote: https://rubygems.org/

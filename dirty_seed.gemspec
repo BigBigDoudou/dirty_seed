@@ -30,5 +30,5 @@ Gem::Specification.new do |spec|
   spec.test_files = Dir['spec/**/*']
 
   spec.add_dependency 'faker'
-  spec.add_dependency 'rails', '~> 6.0.3', '>= 6.0.3.3'
+  spec.add_dependency 'rails', '>= 5.2'
 end

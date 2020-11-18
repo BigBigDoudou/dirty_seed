@@ -6,16 +6,8 @@ RSpec.describe DirtySeed::DirtyModel do
   let(:data_model) { DirtySeed::DataModel }
 
   describe '#initialize(model:)' do
-    context 'when <:model> inherits from ActiveRecord::Base' do
-      it 'instantiates an instance' do
-        expect(described_class.new(model: Alfa)).to be_a described_class
-      end
-    end
-
-    context 'when <:model> does not inherit from ActiveRecord::Base' do
-      it 'raises an ArgumentError' do
-        expect { described_class.new(model: Object) }.to raise_error ArgumentError
-      end
+    it 'instantiates an instance' do
+      expect(described_class.new(Alfa)).to be_a described_class
     end
   end
 
@@ -31,8 +23,8 @@ RSpec.describe DirtySeed::DirtyModel do
 
     it 'logs the errors' do
       Alfa.create!
-      data_model.juliet.seed(3)
-      expect(data_model.juliet.errors).to match_array(
+      data_model.juliett.seed(3)
+      expect(data_model.juliett.errors).to match_array(
         [
           'Alfa should be some specific alfa',
           'String should be a specific string',
@@ -53,6 +45,8 @@ RSpec.describe DirtySeed::DirtyModel do
       expect(data_model.golf.associations.count).to eq 0
       expect(data_model.hotel.associations.count).to eq 1
       expect(data_model.india.associations.count).to eq 1
+      expect(data_model.juliett.associations.count).to eq 1
+      expect(data_model.kilo.associations.count).to eq 0
     end
   end
 
@@ -67,6 +61,8 @@ RSpec.describe DirtySeed::DirtyModel do
       expect(data_model.golf.associated_models).to be_empty
       expect(data_model.hotel.associated_models).to match_array([India])
       expect(data_model.india.associated_models).to match_array([Hotel])
+      expect(data_model.juliett.associated_models).to match_array([Alfa])
+      expect(data_model.kilo.associated_models).to be_empty
     end
   end
 
@@ -77,10 +73,12 @@ RSpec.describe DirtySeed::DirtyModel do
       expect(data_model.charlie.attributes.count).to eq 0
       expect(data_model.delta.attributes.count).to eq 0
       expect(data_model.echo.attributes.count).to eq 0
-      expect(data_model.foxtrot.attributes.count).to eq 1
-      expect(data_model.golf.attributes.count).to eq 1
+      expect(data_model.foxtrot.attributes.count).to eq 0
+      expect(data_model.golf.attributes.count).to eq 0
       expect(data_model.hotel.attributes.count).to eq 0
       expect(data_model.india.attributes.count).to eq 0
+      expect(data_model.juliett.attributes.count).to eq 2
+      expect(data_model.kilo.attributes.count).to eq 0
     end
   end
 

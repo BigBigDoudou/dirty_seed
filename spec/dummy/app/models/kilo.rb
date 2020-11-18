@@ -1,0 +1,2 @@
+class Kilo < ApplicationRecord
+end
