@@ -1,25 +1,28 @@
 # frozen_string_literal: true
 
 module DirtySeed
-  # represents the data model
+  # Represents the data model
   class DataModel
     include Singleton
     attr_accessor :logs
 
     class << self
-      # defines class methods forwarding to instance methods
+      # Defines class methods forwarding to instance methods
       %i[seed models active_record_models print_logs].each do |method_name|
         define_method(method_name) { instance.public_send(method_name) }
       end
 
-      # returns dirty model if method_name matches its name
+      # Returns dirty model if method_name matches its name
+      # @return [DirtySeed::DirtyModel]
+      # @raise [NoMethodError] if method_name does not match any dirty model
       def method_missing(method_name, *args, &block)
         models.find do |model|
           model.name.underscore.to_sym == method_name
         end || super
       end
 
-      # returns true if method_name matches a dirty model name
+      # Returns true if method_name matches a dirty model name
+      # @return [Boolean]
       def respond_to_missing?(method_name, include_private = false)
         models.any? do |model|
           model.name.underscore.to_sym == method_name
@@ -27,39 +30,45 @@ module DirtySeed
       end
     end
 
-    # initializes an instance - no arguments required
+    # Initializes an instance
+    # @return [DirtySeed::DataModel]
     def initialize
       Rails.application.eager_load!
       @logs = {}
     end
 
-    # seeds the database with dirty instances
+    # Seeds the database with dirty instances
+    # @return [void]
     def seed
       # check if ApplicationRecord is defined first
       ::ApplicationRecord && 3.times { models.each(&:seed) }
       print_logs
     end
 
-    # returns an Array of DirtyModel instances
+    # Returns an dirty models
+    # @return [Array<DirtySeed::DirtyModel>]
     def models
       @models ||=
         active_record_models.map do |active_record_model|
-          DirtySeed::DirtyModel.new(model: active_record_model)
+          DirtySeed::DirtyModel.new(active_record_model)
         end
     end
 
-    # returns an Array of ApplicationRecord inherited classes, sorted by their associations
+    # Returns ApplicationRecord inherited classes sorted by their associations
+    # @return [Array<Class>] a class inheriting from ApplicationRecord
     def active_record_models
       @active_record_models ||=
-        DirtySeed::Sorter.new(models: unsorted_active_record_models).sort!
+        DirtySeed::Sorter.new(unsorted_active_record_models).sort!
     end
 
-    # returns an Array of ApplicationRecord inherited classes
+    # Returns an ApplicationRecord inherited classes
+    # @return [Array<Class>] a class inheriting from ApplicationRecord
     def unsorted_active_record_models
       ::ApplicationRecord.descendants.reject(&:abstract_class)
     end
 
-    # prints logs in the console
+    # Prints logs in the console
+    # @return [void]
     def print_logs
       models.sort_by(&:name).each do |model|
         puts model.name

@@ -17,6 +17,8 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular 'golf', 'golfs'
   inflect.irregular 'hotel', 'hotels'
   inflect.irregular 'india', 'indias'
+  inflect.irregular 'juliett', 'julietts'
+  inflect.irregular 'kilo', 'kilos'
 end
 
 # These inflection rules are supported but not enabled by default:

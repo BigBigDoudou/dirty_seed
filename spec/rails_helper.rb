@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require 'simplecov'
-SimpleCov.start 'rails'
+SimpleCov.start 'rails' do
+  add_filter 'lib/dirty_seed/version.rb'
+end
 
 ENV['RAILS_ENV'] ||= 'test'
 
@@ -15,6 +17,7 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'database_cleaner'
 require 'factory_bot_rails'
 require 'rspec/rails'
+Dir[Rails.root.join('..', '..', 'spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
 # Load migrations from the dummy app.
 ActiveRecord::Migrator.migrations_paths = File.join(ENGINE_ROOT, 'spec/dummy/db/migrate')

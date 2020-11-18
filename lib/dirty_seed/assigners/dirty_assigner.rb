@@ -4,33 +4,28 @@ require 'faker'
 
 module DirtySeed
   module Assigners
-    # draws a value matching validators
+    # Draws a value matching validators
     class DirtyAssigner
-      attr_reader :validators, :sequence
+      attr_reader :dirty_attribute, :sequence
 
-      # initializes an instance with:
-      # - validators: Array of ActiveModel::Validation instances
-      # - sequence: Integer
-      def initialize(validators: [], sequence: 0)
-        self.validators = validators
-        self.sequence = sequence
+      # Initializes an instance
+      # @param attribute [DirtySeed::DirtyAttribute]
+      # @param sequence [Integer]
+      # @return [DirtySeed::Assigners::DirtyAssigner]
+      def initialize(dirty_attribute, sequence)
+        @dirty_attribute = dirty_attribute
+        @sequence = sequence
       end
 
-      # validates and sets @validators
-      def validators=(value)
-        raise ArgumentError unless value.is_a?(Array) && value.all? { |item| item.is_a? ActiveModel::Validator }
-
-        @validators = value
+      # Returns an validators related to the current attribute
+      # @return [Array<ActiveModel::Validations::EachValidators>]
+      def validators
+        dirty_attribute.validators
       end
 
-      # validates and sets @sequence
-      def sequence=(value)
-        raise ArgumentError unless value.is_a? Integer
-
-        @sequence = value
-      end
-
-      # returns a random value
+      # Returns a random value depending on the attribute type
+      # @return [void]
+      # @note This method should be overrided
       def value; end
     end
   end

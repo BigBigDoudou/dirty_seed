@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_23_100336) do
+ActiveRecord::Schema.define(version: 2020_09_23_100337) do
 
   create_table "alfas", force: :cascade do |t|
     t.boolean "boolean"
@@ -77,13 +77,23 @@ ActiveRecord::Schema.define(version: 2020_09_23_100336) do
     t.index ["hotel_id"], name: "index_indias_on_hotel_id"
   end
 
-  create_table "juliets", force: :cascade do |t|
+  create_table "julietts", force: :cascade do |t|
     t.integer "alfa_id", null: false
     t.string "string"
     t.integer "integer"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["alfa_id"], name: "index_juliets_on_alfa_id"
+    t.index ["alfa_id"], name: "index_julietts_on_alfa_id"
+  end
+
+  create_table "kilos", force: :cascade do |t|
+    t.string "type"
+    t.string "encrypted_password"
+    t.string "reset_password_token"
+    t.string "reset_password_sent_at"
+    t.string "remember_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   add_foreign_key "charlies", "alfas"
@@ -91,5 +101,5 @@ ActiveRecord::Schema.define(version: 2020_09_23_100336) do
   add_foreign_key "deltas", "charlies", column: "zed_id"
   add_foreign_key "hotels", "indias"
   add_foreign_key "indias", "hotels"
-  add_foreign_key "juliets", "alfas"
+  add_foreign_key "julietts", "alfas"
 end

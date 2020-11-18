@@ -38,8 +38,7 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Next features
 
-* Assign values for more data types (json, binary, etc.).
+* Assign values for more data types (json, array, etc.).
 * Integrate more validations (uniqueness, inclusion, length, absence, etc.).
-* Guess specific fields by name (email, password, etc.) and define adapted values.
-* Get instance errors back and use them to adjust values.
-* Add configuration so the client can define how to seed: number of instances, models to skip, default values, etc.
+* Use instance errors to adjust values.
+* Add a configuration system to define how to seed: number of instances, models to skip, default values, etc.

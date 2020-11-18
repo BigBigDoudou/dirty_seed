@@ -4,39 +4,31 @@ require 'rails_helper'
 
 RSpec.describe DirtySeed::Sorter do
   describe '#initialize' do
-    context 'when arguments are valid' do
-      it 'instantiates an instance' do
-        expect(described_class.new(models: [Alfa, Bravo])).to be_a described_class
-      end
-    end
-
-    context 'when all models do not inherit from ActiveRecord::Base' do
-      it 'raises an ArgumentError' do
-        expect { described_class.new(models: [Alfa, Object]) }.to raise_error ArgumentError
-      end
+    it 'instantiates an instance' do
+      expect(described_class.new([Alfa, Bravo])).to be_a described_class
     end
   end
 
   describe '#sort' do
     it 'returns an empty array if models is empty' do
-      sorted = DirtySeed::Sorter.new(models: []).sort!
+      sorted = DirtySeed::Sorter.new([]).sort!
       expect(sorted).to be_empty
     end
 
     it 'sorts models by dependencies [1]' do
-      sorted = DirtySeed::Sorter.new(models: [Alfa, Charlie]).sort!
+      sorted = DirtySeed::Sorter.new([Alfa, Charlie]).sort!
       expect(sorted).to eq([Alfa, Charlie])
     end
 
     it 'sorts models by dependencies [2]' do
-      sorted = DirtySeed::Sorter.new(models: [Charlie, Alfa]).sort!
+      sorted = DirtySeed::Sorter.new([Charlie, Alfa]).sort!
       expect(sorted).to eq([Alfa, Charlie])
     end
 
     it 'sorts models by dependencies [3]' do
-      active_record_models = [Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India, Juliet]
+      active_record_models = [Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India, Juliett, Kilo]
       10.times do
-        sorted = DirtySeed::Sorter.new(models: active_record_models.shuffle).sort!
+        sorted = DirtySeed::Sorter.new(active_record_models.shuffle).sort!
         expect(sorted.index(Alfa)).to be < sorted.index(Delta)
         expect(sorted.index(Alfa)).to be < sorted.index(Echo)
         expect(sorted.index(Charlie)).to be < sorted.index(Echo)
@@ -46,7 +38,7 @@ RSpec.describe DirtySeed::Sorter do
 
     context 'when infinite loop could happens' do
       it 'does not raise error' do
-        sorted = DirtySeed::Sorter.new(models: [India, Hotel]).sort!
+        sorted = DirtySeed::Sorter.new([India, Hotel]).sort!
         expect(sorted).to eq([Hotel, India])
       end
     end
