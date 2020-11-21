@@ -4,40 +4,45 @@ module DirtySeed
   module Assigners
     # Draws a String matching validators
     class DirtyString < DirtyAssigner
-      SPECIFIC_ATTRIBUTES = {
-        address: -> { Faker::Address.unique.full_address },
-        city: -> { Faker::Address.unique.city },
-        country: -> { Faker::Address.unique.country },
-        description: -> { Faker::Lorem.unique.paragraph(sentence_count: 2, random_sentences_to_add: 4) },
-        email: -> { Faker::Internet.unique.email(domain: 'example') },
-        first_name: -> { ::Faker::Name.unique.first_name },
-        firstname: -> { ::Faker::Name.unique.first_name },
-        last_name: -> { ::Faker::Name.unique.last_name },
-        lastname: -> { ::Faker::Name.unique.last_name },
-        lat: -> { Faker::Address.unique.latitude },
-        latitutde: -> { Faker::Address.unique.latitude },
-        lng: -> { Faker::Address.unique.longitude },
-        locale: -> { Faker::Address.unique.country_code },
-        longitude: -> { Faker::Address.unique.longitude },
-        middlename: -> { ::Faker::Name.unique.middle_name },
-        middle_name: -> { ::Faker::Name.unique.middle_name },
-        password: -> { ::Faker::Internet.unique.password },
-        phone: -> { Faker::PhoneNumber.unique.phone_number },
-        phone_number: -> { Faker::PhoneNumber.unique.phone_number },
-        reference: -> { Faker::Internet.unique.uuid },
-        title: -> { Faker::Lorem.unique.sentence(word_count: 3, random_words_to_add: 4) },
-        username: -> { Faker::Internet.unique.username }
-      }.freeze
-      private_constant :SPECIFIC_ATTRIBUTES
-
-      # Returns a string matching all validators
+      # Returns a value matching all validators
       # @return [String]
       # @note First try to guess attribute meaning by its name and use Faker to return a coherent value
       def value
-        SPECIFIC_ATTRIBUTES[dirty_attribute.name]&.call || default
+        specific = specific_attributes[dirty_attribute.name]
+        return faker_value(specific) if specific
+
+        default
       end
 
       private
+
+      # Returns specific attributes
+      # @return [Hash]
+      # @example
+      #   { address: { category: 'Address', method: 'full_address' } }
+      def specific_attributes
+        YAML.safe_load(
+          File.read(
+            DirtySeed::Engine.root.join('lib', 'dirty_seed', 'assigners', 'fakers.yml')
+          )
+        ).deep_symbolize_keys
+      end
+
+      # Returns a value matching the requirements
+      # @param category [Symbol] fake category
+      # @param method [Symbol] fake method
+      # @param unique [Boolean] should the value be unique
+      # @param options [Hash] options used by faker
+      # @return [String]
+      def faker_value(category:, method:, unique: false, options: nil)
+        action = "::Faker::#{category}".constantize
+        action = action.unique if unique
+        if options
+          action.public_send(method, options)
+        else
+          action.public_send(method)
+        end
+      end
 
       # Returns a standard string
       # @return [String]

@@ -2,7 +2,7 @@
 
 module DirtySeed
   module Assigners
-    # Draws a boolean value matching validators
+    # Draws a value matching validators
     class DirtyBoolean < DirtyAssigner
       # Returns a boolean
       # @return [Boolean]

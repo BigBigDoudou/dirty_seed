@@ -6,7 +6,7 @@ module DirtySeed
     class DirtyInteger < DirtyAssigner
       attr_reader :min, :max
 
-      # Returns an integer matching all validators
+      # Returns an value matching all validators
       # @return [Integer]
       def value
         define_min_and_max
@@ -31,7 +31,7 @@ module DirtySeed
         end
       end
 
-      # Returns a random integer
+      # Returns a random value
       # @return [Integer]
       def random
         rand(sequence..42)
@@ -64,7 +64,7 @@ module DirtySeed
         @max = max_for(validator) if @max.nil? || max_for(validator) < @max
       end
 
-      # Returns an integer representing the minimal acceptable value
+      # Returns an value representing the minimal acceptable value
       # @param validator [ActiveModel::Validations::EachValidator]
       # @return [Integer]
       def min_for(validator)
@@ -73,7 +73,7 @@ module DirtySeed
           validator.options[:in]&.min
       end
 
-      # Returns an integer representing the maximal acceptable value
+      # Returns an value representing the maximal acceptable value
       # @param validator [ActiveModel::Validations::EachValidator]
       # @return [Integer]
       def max_for(validator)

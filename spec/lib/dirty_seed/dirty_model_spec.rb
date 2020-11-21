@@ -11,19 +11,19 @@ RSpec.describe DirtySeed::DirtyModel do
     end
   end
 
-  describe '#seed(count)' do
-    it 'tries to create <count> instances of the model' do
-      expect { data_model.alfa.seed(3) }.to change { Alfa.count }.by(3)
+  describe '#seed(count: x, offset: y)' do
+    it 'tries to create x instances of the model' do
+      expect { data_model.alfa.seed(count: 3) }.to change { Alfa.count }.by(3)
     end
 
     it 'counts the number of successfully seeded instances' do
-      data_model.alfa.seed(3)
+      data_model.alfa.seed(count: 3)
       expect(data_model.alfa.count).to eq 3
     end
 
     it 'logs the errors' do
       Alfa.create!
-      data_model.juliett.seed(3)
+      data_model.juliett.seed(count: 3)
       expect(data_model.juliett.errors).to match_array(
         [
           'Alfa should be some specific alfa',

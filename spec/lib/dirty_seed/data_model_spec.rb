@@ -28,9 +28,9 @@ RSpec.describe DirtySeed::DataModel do
     end
   end
 
-  describe '::models' do
+  describe '::dirty_models' do
     it 'returns an array of dirty models representing Active Record models' do
-      expect(described_class.models.map(&:name)).to match_array(
+      expect(described_class.dirty_models.map(&:name)).to match_array(
         %w[Alfa Bravo Charlie Delta Echo Foxtrot Golf Hotel India Juliett Kilo]
       )
     end
@@ -56,7 +56,7 @@ RSpec.describe DirtySeed::DataModel do
   describe '#method_missing' do
     context 'when method_name matches an ActiveRecord model' do
       it 'returns the related dirty model' do
-        dirty_alfa = described_class.models.find { |dirty_model| dirty_model.model == Alfa }
+        dirty_alfa = described_class.dirty_models.find { |dirty_model| dirty_model.model == Alfa }
         expect(described_class.respond_to_missing?(:alfa)).to be true
         expect(described_class.alfa).to eq dirty_alfa
       end

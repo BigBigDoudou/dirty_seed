@@ -2,7 +2,7 @@
 
 module DirtySeed
   module Assigners
-    # Draws a Date matching validators
+    # Draws a value matching validators
     class DirtyDate < DirtyAssigner
       # Returns a date matching all validators
       # @return [Date]

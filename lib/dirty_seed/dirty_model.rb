@@ -26,6 +26,8 @@ module DirtySeed
     # @return [DirtySeed::DirtyModel]
     def initialize(model)
       @model = model
+      @seeded = 0
+      @errors = []
     end
 
     # Returns models where models are associated to the current model through a has_many or has_one associations
@@ -59,21 +61,13 @@ module DirtySeed
     # Creates instances for each model
     # @param count [Integer]
     # @return [void]
-    def seed(count = 5)
-      reset_info
+    def seed(count: 1, offset: 0)
       count.times do |sequence|
-        create_instance(sequence)
+        create_instance(sequence + offset)
       end
     end
 
     private
-
-    # Reset seed info
-    # @return [void]
-    def reset_info
-      @seeded = 0
-      @errors = []
-    end
 
     # Creates an instance
     # @param sequence [Integer]

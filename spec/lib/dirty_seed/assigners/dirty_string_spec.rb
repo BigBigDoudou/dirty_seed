@@ -11,5 +11,15 @@ RSpec.describe DirtySeed::Assigners::DirtyString do
         expect(described_class.new(dirty_attribute, 0).value).to be_a String
       end
     end
+
+    context 'when meaning can be guessed' do
+      it 'returns a meaningfull String' do
+        email_attribute = build_dirty_attribute(name: 'email', type: :string)
+        10.times do
+          value = described_class.new(email_attribute, 0).value
+          expect(URI::MailTo::EMAIL_REGEXP.match?(value)).to be true
+        end
+      end
+    end
   end
 end

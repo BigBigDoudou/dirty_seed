@@ -8,7 +8,7 @@ module DirtySeed
 
     class << self
       # Defines class methods forwarding to instance methods
-      %i[seed models active_record_models print_logs].each do |method_name|
+      %i[seed dirty_models active_record_models print_logs].each do |method_name|
         define_method(method_name) { instance.public_send(method_name) }
       end
 
@@ -16,16 +16,16 @@ module DirtySeed
       # @return [DirtySeed::DirtyModel]
       # @raise [NoMethodError] if method_name does not match any dirty model
       def method_missing(method_name, *args, &block)
-        models.find do |model|
-          model.name.underscore.to_sym == method_name
+        dirty_models.find do |dirty_model|
+          dirty_model.name.underscore.to_sym == method_name
         end || super
       end
 
       # Returns true if method_name matches a dirty model name
       # @return [Boolean]
       def respond_to_missing?(method_name, include_private = false)
-        models.any? do |model|
-          model.name.underscore.to_sym == method_name
+        dirty_models.any? do |dirty_model|
+          dirty_model.name.underscore.to_sym == method_name
         end || super
       end
     end
@@ -41,14 +41,16 @@ module DirtySeed
     # @return [void]
     def seed
       # check if ApplicationRecord is defined first
-      ::ApplicationRecord && 3.times { models.each(&:seed) }
+      ::ApplicationRecord && 3.times do |i|
+        dirty_models.each { |dirty_model| dirty_model.seed(count: 5, offset: i * 5) }
+      end
       print_logs
     end
 
-    # Returns an dirty models
+    # Returns dirty models
     # @return [Array<DirtySeed::DirtyModel>]
-    def models
-      @models ||=
+    def dirty_models
+      @dirty_models ||=
         active_record_models.map do |active_record_model|
           DirtySeed::DirtyModel.new(active_record_model)
         end
@@ -70,10 +72,10 @@ module DirtySeed
     # Prints logs in the console
     # @return [void]
     def print_logs
-      models.sort_by(&:name).each do |model|
-        puts model.name
-        puts "  created: #{model.seeded}"
-        puts "  errors: #{model.errors.join(', ')}" if model.errors.any?
+      dirty_models.sort_by(&:name).each do |dirty_model|
+        puts dirty_model.name
+        puts "  created: #{dirty_model.seeded}"
+        puts "  errors: #{dirty_model.errors.join(', ')}" if dirty_model.errors.any?
       end
     end
   end
