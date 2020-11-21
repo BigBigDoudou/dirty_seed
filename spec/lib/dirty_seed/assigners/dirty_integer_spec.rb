@@ -34,8 +34,6 @@ RSpec.describe DirtySeed::Assigners::DirtyInteger do
       it 'returns an integer greater than and less than the requirements' do
         greater_than = ActiveModel::Validations::NumericalityValidator.new(attributes: :fake, greater_than: 1)
         less_than = ActiveModel::Validations::NumericalityValidator.new(attributes: :fake, less_than: 5)
-        # greater_than = set_validator(type: :greater_than, value: 1)
-        # less_than = set_validator(type: :less_than, value: 5)
         assigner = described_class.new(dirty_attribute, 0)
         allow(assigner.dirty_attribute).to receive(:validators).and_return([greater_than, less_than])
         5.times do
