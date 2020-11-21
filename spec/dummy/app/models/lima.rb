@@ -1,0 +1,2 @@
+class Lima < ApplicationRecord
+end

@@ -3,6 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe DirtySeed::Assigners::DirtyString do
+  let(:data_model) { DirtySeed::DataModel }
   let(:dirty_attribute) { build_dirty_attribute(type: :string) }
 
   describe '#value' do
@@ -13,6 +14,11 @@ RSpec.describe DirtySeed::Assigners::DirtyString do
     end
 
     context 'when meaning can be guessed' do
+      it 'does not return nil' do
+        data_model.lima.seed(10)
+        expect(Lima.find_each.map(&:attributes).map(&:values).flatten.none?(&:nil?)).to be true
+      end
+
       it 'returns a meaningfull String' do
         email_attribute = build_dirty_attribute(name: 'email', type: :string)
         10.times do

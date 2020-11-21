@@ -8,8 +8,15 @@ module DirtySeed
 
     class << self
       # Defines class methods forwarding to instance methods
-      %i[seed dirty_models active_record_models print_logs].each do |method_name|
+      %i[dirty_models active_record_models print_logs reset].each do |method_name|
         define_method(method_name) { instance.public_send(method_name) }
+      end
+
+      # Calls instance #seed method with count
+      # @param [count] count of record to seed for each model
+      # @return [void]
+      def seed(count)
+        instance.seed(count)
       end
 
       # Returns dirty model if method_name matches its name
@@ -38,12 +45,12 @@ module DirtySeed
     end
 
     # Seeds the database with dirty instances
+    # @param [count] count of record to seed for each model
     # @return [void]
-    def seed
-      # check if ApplicationRecord is defined first
-      ::ApplicationRecord && 3.times do |i|
-        dirty_models.each { |dirty_model| dirty_model.seed(count: 5, offset: i * 5) }
-      end
+    def seed(count)
+      # check if ApplicationRecord is defined first (or raise error)
+      ::ApplicationRecord &&
+        dirty_models.each { |dirty_model| dirty_model.seed(count) }
       print_logs
     end
 
@@ -77,6 +84,14 @@ module DirtySeed
         puts "  created: #{dirty_model.seeded}"
         puts "  errors: #{dirty_model.errors.join(', ')}" if dirty_model.errors.any?
       end
+    end
+
+    # Reset instances
+    # @return [void]
+    def reset
+      @logs = nil
+      @dirty_models = nil
+      @active_record_models = nil
     end
   end
 end

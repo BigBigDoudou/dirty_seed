@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_23_100337) do
+ActiveRecord::Schema.define(version: 2020_09_23_100338) do
 
   create_table "alfas", force: :cascade do |t|
     t.boolean "boolean"
@@ -92,6 +92,35 @@ ActiveRecord::Schema.define(version: 2020_09_23_100337) do
     t.string "reset_password_token"
     t.string "reset_password_sent_at"
     t.string "remember_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "limas", force: :cascade do |t|
+    t.string "address"
+    t.string "city"
+    t.string "country"
+    t.string "description"
+    t.string "email"
+    t.string "first_name"
+    t.string "firstname"
+    t.string "last_name"
+    t.string "lastname"
+    t.string "lat"
+    t.string "latitute"
+    t.string "lng"
+    t.string "locale"
+    t.string "longitude"
+    t.string "middlename"
+    t.string "middle_name"
+    t.string "password"
+    t.string "phone"
+    t.string "phone_number"
+    t.string "reference"
+    t.string "title"
+    t.string "user_name"
+    t.string "username"
+    t.string "uuid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

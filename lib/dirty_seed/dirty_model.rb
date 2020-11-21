@@ -61,10 +61,8 @@ module DirtySeed
     # Creates instances for each model
     # @param count [Integer]
     # @return [void]
-    def seed(count: 1, offset: 0)
-      count.times do |sequence|
-        create_instance(sequence + offset)
-      end
+    def seed(count)
+      count.times { |sequence| create_instance(sequence) }
     end
 
     private

@@ -19,6 +19,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular 'india', 'indias'
   inflect.irregular 'juliett', 'julietts'
   inflect.irregular 'kilo', 'kilos'
+  inflect.irregular 'lima', 'limas'
 end
 
 # These inflection rules are supported but not enabled by default:

@@ -9,9 +9,7 @@ module DirtySeed
       # @note First try to guess attribute meaning by its name and use Faker to return a coherent value
       def value
         specific = specific_attributes[dirty_attribute.name]
-        return faker_value(specific) if specific
-
-        default
+        res = specific && faker_value(specific) || default
       end
 
       private
@@ -37,11 +35,7 @@ module DirtySeed
       def faker_value(category:, method:, unique: false, options: nil)
         action = "::Faker::#{category}".constantize
         action = action.unique if unique
-        if options
-          action.public_send(method, options)
-        else
-          action.public_send(method)
-        end
+        options ? action.public_send(method, options) : action.public_send(method)
       end
 
       # Returns a standard string

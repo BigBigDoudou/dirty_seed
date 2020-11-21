@@ -1,12 +1,12 @@
 address:
   category: Address
-  method: full_adress
+  method: full_address
 city:
-  - category: Address
-  - method: city
+  category: Address
+  method: city
 country:
-  - category: Address
-  - method: country
+  category: Address
+  method: country
 description:
   category: Lorem
   method: paragraph
