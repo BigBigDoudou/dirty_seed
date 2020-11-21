@@ -9,7 +9,7 @@ module DirtySeed
       # @note First try to guess attribute meaning by its name and use Faker to return a coherent value
       def value
         specific = specific_attributes[dirty_attribute.name]
-        res = specific && faker_value(specific) || default
+        specific && faker_value(specific) || default
       end
 
       private
