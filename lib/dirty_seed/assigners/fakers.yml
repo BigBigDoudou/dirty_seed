@@ -16,7 +16,6 @@ description:
 email:
   category: Internet
   method: email
-  unique: true
   options:
     domain: example
 first_name:
@@ -34,22 +33,18 @@ lastname:
 lat:
   category: Address
   method: latitude
-  unique: true
 latitute:
   category: Address
   method: latitude
-  unique: true
 lng:
   category: Address
   method: longitude
-  unique: true
 locale:
   category: Address
   method: country_code
 longitude:
   category: Address
   method: longitude
-  unique: true
 middlename:
   category: Name
   method: middle_name
@@ -59,35 +54,27 @@ middle_name:
 password:
   category: Internet
   method: password
-  unique: true
 phone:
   category: PhoneNumber
   method: phone_number
-  unique: true
 phone_number:
   category: PhoneNumber
   method: phone_number
-  unique: true
 reference:
   category: Internet
   method: uuid
-  unique: true
 title:
   category: Lorem
   method: sentence
-  unique: true 
   options:
     word_count: 3
     random_words_to_add: 4
 user_name:
   category: Internet
   method: username
-  unique: true 
 username:
   category: Internet
   method: username
-  unique: true 
 uuid:
   category: Internet
   method: uuid
-  unique: true

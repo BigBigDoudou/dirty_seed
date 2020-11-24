@@ -26,18 +26,6 @@ module DirtySeed
         ).deep_symbolize_keys
       end
 
-      # Returns a value matching the requirements
-      # @param category [Symbol] fake category
-      # @param method [Symbol] fake method
-      # @param unique [Boolean] should the value be unique
-      # @param options [Hash] options used by faker
-      # @return [String]
-      def faker_value(category:, method:, unique: false, options: nil)
-        action = "::Faker::#{category}".constantize
-        action = action.unique if unique
-        options ? action.public_send(method, options) : action.public_send(method)
-      end
-
       # Returns a standard string
       # @return [String]
       def default

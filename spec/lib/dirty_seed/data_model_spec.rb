@@ -56,12 +56,6 @@ RSpec.describe DirtySeed::DataModel do
     end
   end
 
-  xdescribe '::print_logs' do
-    it 'prints logs in the console' do
-      described_class.seed
-    end
-  end
-
   describe '::dirty_models' do
     it 'returns an array of dirty models representing Active Record models' do
       expect(described_class.dirty_models.map(&:name)).to match_array(

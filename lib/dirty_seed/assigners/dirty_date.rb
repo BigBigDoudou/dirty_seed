@@ -7,7 +7,11 @@ module DirtySeed
       # Returns a date matching all validators
       # @return [Date]
       def value
-        ::Faker::Date.between(from: 42.days.ago, to: 42.days.from_now)
+        faker_value(
+          category: :Date,
+          method: :between,
+          options: { from: 42.days.ago, to: 42.days.from_now }
+        )
       end
     end
   end

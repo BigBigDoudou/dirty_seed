@@ -268,6 +268,7 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Next features
 
+* Seed instance by batch to increase performances
 * Add a configuration system to define how to seed: number of instances, models to skip, default values, etc.
 * Assign values for more data types (json, array, etc.).
 * Detect more "special" attributes to ignore.
