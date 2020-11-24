@@ -17,6 +17,8 @@ module DirtySeed
         @sequence = sequence
       end
 
+      private
+
       # Returns an validators related to the current attribute
       # @return [Array<ActiveModel::Validations::EachValidators>]
       def validators
@@ -31,7 +33,9 @@ module DirtySeed
       # Returns true if the value should be unique
       # @return [Boolean]
       def unique?
-        validators.any? { |validator| validator.options[:uniqueness] }
+        validators.any? do |validator|
+          validator.is_a? ActiveRecord::Validations::UniquenessValidator
+        end
       end
 
       # Returns a value matching the requirements

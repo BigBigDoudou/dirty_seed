@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe DirtySeed::Assigners::DirtyAssigner do
-  let(:dirty_attribute) { build_dirty_attribute }
+  let(:dirty_attribute) { build_dirty_attribute(type: :integer) }
 
   describe '#initialize' do
     it 'instantiates an instance' do
@@ -11,7 +11,7 @@ RSpec.describe DirtySeed::Assigners::DirtyAssigner do
     end
   end
 
-  describe '#unique?' do
+  describe '#unique?', skip: 'has been set private' do
     let(:assigner) { described_class.new(dirty_attribute, 0) }
 
     context 'when there is a uniqueness validation' do
