@@ -7,7 +7,7 @@ RSpec.describe DirtySeed::Assigners::Boolean do
 
   describe '#value' do
     it 'returns a Boolean' do
-      expect(described_class.new(attribute).value).to be_in([true, false])
+      10.times { expect(described_class.new(attribute).value).to be_in([true, false]) }
     end
   end
 end

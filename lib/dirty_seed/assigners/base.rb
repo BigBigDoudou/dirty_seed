@@ -13,7 +13,8 @@ module DirtySeed
       # @return [<?>] depends on attribute
       def value
         return if absent?
-        return inclusion_options.sample if inclusion_options
+        return inclusion_options.sample if inclusion_options.is_a? Array
+        return rand(inclusion_options) if inclusion_options.is_a? Range
 
         try_specific || adapted_assigner&.value
       end

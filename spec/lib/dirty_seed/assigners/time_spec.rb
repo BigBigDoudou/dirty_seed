@@ -8,7 +8,7 @@ RSpec.describe DirtySeed::Assigners::Time do
   describe '#value' do
     context 'when there are no validators' do
       it 'returns a Time' do
-        expect(described_class.new(attribute).value).to be_a Time
+        10.times { expect(described_class.new(attribute).value).to be_a Time }
       end
     end
   end

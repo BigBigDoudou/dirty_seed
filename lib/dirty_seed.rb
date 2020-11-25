@@ -20,6 +20,7 @@ module DirtySeed
     autoload :Date, 'dirty_seed/assigners/date'
     autoload :Float, 'dirty_seed/assigners/float'
     autoload :Integer, 'dirty_seed/assigners/integer'
+    autoload :MinMaxHelper, 'dirty_seed/assigners/min_max_helper'
     autoload :Number, 'dirty_seed/assigners/number'
     autoload :String, 'dirty_seed/assigners/string'
     autoload :Time, 'dirty_seed/assigners/time'

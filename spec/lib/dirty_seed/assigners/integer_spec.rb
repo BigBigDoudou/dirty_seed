@@ -8,7 +8,7 @@ RSpec.describe DirtySeed::Assigners::Integer do
   describe '#value' do
     context 'when there are no validators' do
       it 'returns an integer' do
-        expect(described_class.new(attribute).value).to be_an Integer
+        10.times { expect(described_class.new(attribute).value).to be_an Integer }
       end
     end
 
@@ -16,8 +16,8 @@ RSpec.describe DirtySeed::Assigners::Integer do
       it 'returns an integer greater than the requirement' do
         assigner = described_class.new(attribute)
         validator = ActiveModel::Validations::NumericalityValidator.new(attributes: :fake, greater_than: 1_000)
-        allow(assigner.attribute).to receive(:validators).and_return([validator])
-        5.times { expect(assigner.value).to be >= 1_000 }
+        allow(attribute).to receive(:validators).and_return([validator])
+        10.times { expect(assigner.value).to be >= 1_000 }
       end
     end
 
@@ -25,18 +25,17 @@ RSpec.describe DirtySeed::Assigners::Integer do
       it 'returns an integer less than the requirement' do
         assigner = described_class.new(attribute)
         validator = ActiveModel::Validations::NumericalityValidator.new(attributes: :fake, less_than: -1_000)
-        allow(assigner.attribute).to receive(:validators).and_return([validator])
-        5.times { expect(assigner.value).to be < -1_000 }
+        allow(attribute).to receive(:validators).and_return([validator])
+        10.times { expect(assigner.value).to be < -1_000 }
       end
     end
 
     context 'when there are less_than and greater_than validators' do
       it 'returns an integer greater than and less than the requirements' do
-        greater_than = ActiveModel::Validations::NumericalityValidator.new(attributes: :fake, greater_than: 1)
-        less_than = ActiveModel::Validations::NumericalityValidator.new(attributes: :fake, less_than: 5)
         assigner = described_class.new(attribute)
-        allow(assigner.attribute).to receive(:validators).and_return([greater_than, less_than])
-        5.times { expect(assigner.value).to be_between(1, 5).exclusive }
+        validator = ActiveModel::Validations::NumericalityValidator.new(attributes: :fake, greater_than: 1, less_than: 5)
+        allow(attribute).to receive(:validators).and_return([validator])
+        10.times { expect(assigner.value).to be_between(1, 5).exclusive }
       end
     end
   end

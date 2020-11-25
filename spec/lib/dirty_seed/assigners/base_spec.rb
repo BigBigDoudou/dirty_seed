@@ -17,7 +17,7 @@ RSpec.describe DirtySeed::Assigners::Base do
       it 'returns nil' do
         validator = ActiveRecord::Validations::AbsenceValidator.new(attributes: :fake)
         allow(assigner.attribute).to receive(:validators).and_return([validator])
-        expect(assigner.value).to be_nil
+        10.times { expect(assigner.value).to be_nil }
       end
     end
 
@@ -28,7 +28,7 @@ RSpec.describe DirtySeed::Assigners::Base do
           validator = ActiveModel::Validations::InclusionValidator.new(attributes: :fake, in: %w[foo bar zed])
           allow(attribute).to receive(:validators).and_return([validator])
           assigner = described_class.new(attribute)
-          expect(assigner.value).to be_in(%w[foo bar zed])
+          10.times { expect(assigner.value).to be_in(%w[foo bar zed]) }
         end
       end
 
@@ -38,7 +38,16 @@ RSpec.describe DirtySeed::Assigners::Base do
           validator = ActiveModel::Validations::InclusionValidator.new(attributes: :fake, in: [15, 30, 45])
           allow(attribute).to receive(:validators).and_return([validator])
           assigner = described_class.new(attribute)
-          expect(assigner.value).to be_in([15, 30, 45])
+          10.times { expect(assigner.value).to be_in([15, 30, 45]) }
+        end
+      end
+
+      context 'when inclusion is a range (in: 0.0..1.0)' do
+        it 'returns a value included in the range' do
+          assigner = described_class.new(attribute)
+          validator = ActiveModel::Validations::InclusionValidator.new(attributes: :fake, in: 0.0..1.0)
+          allow(attribute).to receive(:validators).and_return([validator])
+          10.times { expect(assigner.value).to be_between(0, 1) }
         end
       end
     end
@@ -48,14 +57,14 @@ RSpec.describe DirtySeed::Assigners::Base do
         it 'returns a meaningful value (example: string "email")' do
           attribute = build_attribute(name: :email, type: :string)
           assigner = described_class.new(attribute)
-          expect(assigner.value).to match(URI::MailTo::EMAIL_REGEXP)
+          10.times { expect(assigner.value).to match(URI::MailTo::EMAIL_REGEXP) }
         end
 
         it 'returns a meaningful value (example: float "latitude")' do
           attribute = build_attribute(name: :latitude, type: :float)
           assigner = described_class.new(attribute)
           expect(assigner.value).to be_a Float
-          expect(assigner.value.to_s).to match(/-?\d+\.\d{9,}/)
+          10.times { expect(assigner.value.to_s).to match(/-?\d+\.\d{9,}/) }
         end
       end
 
@@ -64,7 +73,7 @@ RSpec.describe DirtySeed::Assigners::Base do
           attribute = build_attribute(name: :latitude, type: :string)
           assigner = described_class.new(attribute)
           expect(assigner.value).to be_a String
-          expect(assigner.value).not_to match(/-?\d+\.\d{9,}/)
+          10.times { expect(assigner.value).not_to match(/-?\d+\.\d{9,}/) }
         end
       end
     end

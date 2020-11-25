@@ -284,6 +284,5 @@ The gem is available as open source under the terms of the [MIT License](https:/
 * Detect more "special" attributes to ignore.
 * Use instance errors to adjust values and eventually match custom validations.
 * Add a configuration system to define how to seed: models to skip, default values, etc.
-* Increase performances.
 
 

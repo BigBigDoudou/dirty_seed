@@ -4,6 +4,8 @@ module DirtySeed
   module Assigners
     # Draws a String matching validators
     class String < Assigner
+      include MinMaxHelper
+
       # Returns a value matching all validators
       # @return [String]
       def value
@@ -17,8 +19,8 @@ module DirtySeed
       def default
         faker_value(
           category: :Lorem,
-          method: :sentence,
-          options: { word_count: 3, supplemental: false, random_words_to_add: 4 }
+          method: :paragraph_by_chars,
+          options: { number: rand(min..max), supplemental: false }
         )
       end
 
