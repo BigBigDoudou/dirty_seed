@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe DirtySeed::DirtyModel do
+RSpec.describe DirtySeed::Model do
   let(:data_model) { DirtySeed::DataModel }
 
   describe '#initialize(model:)' do
@@ -16,12 +16,12 @@ RSpec.describe DirtySeed::DirtyModel do
       expect { data_model.alfa.seed(3) }.to change(Alfa, :count).by(3)
     end
 
-    it 'counts the number of successfully seeded instances' do
+    it 'stores the number of successfully seeded instances' do
       data_model.alfa.seed(3)
-      expect(data_model.alfa.count).to eq 3
+      expect(data_model.alfa.instances.count).to eq 3
     end
 
-    it 'logs the errors' do
+    it 'stores the errors' do
       Alfa.create && data_model.juliett.seed(3)
       expect(data_model.juliett.errors).to match_array(
         [
@@ -33,11 +33,11 @@ RSpec.describe DirtySeed::DirtyModel do
     end
   end
 
-  describe '#dirty_associations' do
-    it 'returns dirty_associations' do
-      expect(data_model.alfa.dirty_associations).to be_empty
-      expect(data_model.delta.dirty_associations.count).to eq 2
-      expect(data_model.echo.dirty_associations.count).to eq 1
+  describe '#associations' do
+    it 'returns associations' do
+      expect(data_model.alfa.associations).to be_empty
+      expect(data_model.delta.associations.count).to eq 2
+      expect(data_model.echo.associations.count).to eq 1
     end
   end
 
@@ -49,15 +49,15 @@ RSpec.describe DirtySeed::DirtyModel do
     end
   end
 
-  describe '#dirty_attributes' do
-    it 'instantiates and returns dirty_attributes' do
+  describe '#attributes' do
+    it 'instantiates and returns attributes' do
       expectations = %i[a_boolean an_integer a_decimal a_string a_date a_time a_datetime]
-      expect(data_model.alfa.dirty_attributes.map(&:name)).to match_array(expectations)
+      expect(data_model.alfa.attributes.map(&:name)).to match_array(expectations)
     end
 
     it 'does not instantiate a dirty attribute for "protected columns"' do
       expect(
-        data_model.alfa.dirty_attributes.map(&:name) & described_class::PROTECTED_COLUMNS
+        data_model.alfa.attributes.map(&:name) & described_class::PROTECTED_COLUMNS
       ).to be_empty
     end
   end

@@ -244,7 +244,10 @@ The current attribute names treated this way are:
 
 - `address`
 - `city`
+- `color`
+- `colour`
 - `country`
+- `currency`
 - `description`
 - `email`
 - `first_name`

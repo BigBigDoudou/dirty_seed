@@ -3,12 +3,12 @@
 module DirtySeed
   module Assigners
     # Draws an integer matching validators
-    class DirtyNumber < DirtyAssigner
+    class Number < Assigner
       attr_reader :min, :max
 
       # Returns an value matching all validators
       # @return [Integer, Float]
-      def define_value
+      def value
         unless min && max
           define_min_and_max
           adjust_values

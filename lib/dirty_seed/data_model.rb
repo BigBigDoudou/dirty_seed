@@ -4,11 +4,10 @@ module DirtySeed
   # Represents the data model
   class DataModel
     include Singleton
-    attr_accessor :logs
 
     class << self
       # Defines class methods forwarding to instance methods
-      %i[dirty_models active_record_models print_logs reset].each do |method_name|
+      %i[active_record_models models print_logs reset].each do |method_name|
         define_method(method_name) { instance.public_send(method_name) }
       end
 
@@ -20,19 +19,19 @@ module DirtySeed
       end
 
       # Returns dirty model if method_name matches its name
-      # @return [DirtySeed::DirtyModel]
+      # @return [DirtySeed::Model]
       # @raise [NoMethodError] if method_name does not match any dirty model
       def method_missing(method_name, *args, &block)
-        dirty_models.find do |dirty_model|
-          dirty_model.name.underscore.to_sym == method_name
+        models.find do |model|
+          model.name.underscore.to_sym == method_name
         end || super
       end
 
       # Returns true if method_name matches a dirty model name
       # @return [Boolean]
       def respond_to_missing?(method_name, include_private = false)
-        dirty_models.any? do |dirty_model|
-          dirty_model.name.underscore.to_sym == method_name
+        models.any? do |model|
+          model.name.underscore.to_sym == method_name
         end || super
       end
     end
@@ -41,7 +40,6 @@ module DirtySeed
     # @return [DirtySeed::DataModel]
     def initialize
       Rails.application.eager_load!
-      @logs = {}
     end
 
     # Seeds the database with dirty instances
@@ -50,16 +48,16 @@ module DirtySeed
     def seed(count)
       # check if ApplicationRecord is defined first (or raise error)
       ::ApplicationRecord &&
-        dirty_models.each { |dirty_model| dirty_model.seed(count) }
+        models.each { |model| model.seed(count) }
       print_logs
     end
 
     # Returns dirty models
-    # @return [Array<DirtySeed::DirtyModel>]
-    def dirty_models
-      @dirty_models ||=
+    # @return [Array<DirtySeed::Model>]
+    def models
+      @models ||=
         active_record_models.map do |active_record_model|
-          DirtySeed::DirtyModel.new(active_record_model)
+          DirtySeed::Model.new(active_record_model)
         end
     end
 
@@ -79,10 +77,11 @@ module DirtySeed
     # Prints logs in the console
     # @return [void]
     def print_logs
-      dirty_models.sort_by(&:name).each do |dirty_model|
-        puts dirty_model.name
-        puts "  created: #{dirty_model.seeded}"
-        puts "  errors: #{dirty_model.errors.join(', ')}" if dirty_model.errors.any?
+      puts ''
+      models.sort_by(&:name).each do |model|
+        puts model.name
+        puts "  seeded: #{model.instances.count}"
+        puts "  errors: #{model.errors.join(', ')}" if model.errors.any?
       end
     end
 
@@ -90,7 +89,7 @@ module DirtySeed
     # @return [void]
     def reset
       @logs = nil
-      @dirty_models = nil
+      @models = nil
       @active_record_models = nil
     end
   end

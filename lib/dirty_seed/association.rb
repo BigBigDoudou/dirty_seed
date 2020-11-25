@@ -2,30 +2,19 @@
 
 module DirtySeed
   # Represents an Active Record association
-  class DirtyAssociation
+  class Association
     extend ::DirtySeed::MethodMissingHelper
     forward_missing_methods_to :reflections
 
-    attr_reader :dirty_model, :reflection
+    attr_reader :model, :reflection
 
     # Initializes an instance
-    # @param dirty_model [DirtySeed::DirtyModel]
+    # @param model [DirtySeed::Model]
     # @param reflection [ActiveRecord::Reflection::BelongsToReflection]
-    # @return [DirtySeed::DirtyAssociation]
-    def initialize(dirty_model, reflection)
-      @dirty_model = dirty_model
+    # @return [DirtySeed::Association]
+    def initialize(model, reflection)
+      @model = model
       @reflection = reflection
-    end
-
-    # Assigns a random value to the association
-    # @param instance [Object] an instance of a class inheriting from ApplicationRecord
-    # @return [void]
-    def assign_value(instance)
-      return if associated_models.empty?
-
-      instance.public_send(:"#{name}=", value)
-    rescue ArgumentError => e
-      @errors << e
     end
 
     # Returns a random instance matching the reflection

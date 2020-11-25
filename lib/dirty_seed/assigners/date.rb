@@ -3,10 +3,10 @@
 module DirtySeed
   module Assigners
     # Draws a value matching validators
-    class DirtyDate < DirtyAssigner
+    class Date < Assigner
       # Returns a date matching all validators
       # @return [Date]
-      def define_value
+      def value
         faker_value(
           category: :Date,
           method: :between,

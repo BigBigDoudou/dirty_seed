@@ -24,7 +24,7 @@ module DirtySeed
 
     # Defines missing_method method so it returns the adressee or calls super
     # @example
-    #   calling #name on a DirtyModel instance will call name on its @model object
+    #   calling #name on a Model instance will call name on its @model object
     # @return [void]
     def define_method_missing
       define_method :method_missing do |method_name, *args, &block|

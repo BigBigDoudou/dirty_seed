@@ -6,41 +6,13 @@ RSpec.describe DirtySeed::DataModel do
   describe '::seed' do
     context 'when ApplicationRecord is defined' do
       it 'seeds instances for each model' do
-        described_class.reset
-        described_class.seed(1)
-        # As expected, Juliett can not be seed
-        [Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India].each do |active_record_model|
-          expect(active_record_model.count).to be > 0
-        end
+        expect { described_class.seed(3) }.to change(Alfa, :count).by(3).and change(Golf, :count).by(3)
       end
 
-      it 'logs data' do # rubocop:disable RSpec/ExampleLength
-        described_class.reset
-        expect { described_class.seed(8) }.to output(
-          <<~LOG
-            Alfa
-              created: 8
-            Bravo
-              created: 8
-            Charlie
-              created: 8
-            Delta
-              created: 8
-            Echo
-              created: 8
-            Foxtrot
-              created: 8
-            Golf
-              created: 8
-            Hotel
-              created: 8
-            India
-              created: 8
-            Juliett
-              created: 0
-              errors: Alfa should be some specific alfa, A string should be a specific string, An integer should be a specific integer
-          LOG
-        ).to_stdout
+      it 'logs data' do
+        expect { described_class.seed(1) }.to output(/Alfa/).to_stdout
+        expect { described_class.seed(2) }.to output(/seeded: 2/).to_stdout
+        expect { described_class.seed(1) }.to output(/(errors:)(.*)(A string should be a specific string)/).to_stdout
       end
     end
 
@@ -52,9 +24,9 @@ RSpec.describe DirtySeed::DataModel do
     end
   end
 
-  describe '::dirty_models' do
+  describe '::models' do
     it 'returns an array of dirty models representing Active Record models' do
-      expect(described_class.dirty_models.map(&:name)).to match_array(
+      expect(described_class.models.map(&:name)).to match_array(
         %w[Alfa Bravo Charlie Delta Echo Foxtrot Golf Hotel India Juliett]
       )
     end
@@ -79,7 +51,7 @@ RSpec.describe DirtySeed::DataModel do
   describe '#method_missing' do
     context 'when method_name matches an ActiveRecord model' do
       it 'returns the related dirty model' do
-        dirty_alfa = described_class.dirty_models.find { |dirty_model| dirty_model.model == Alfa }
+        dirty_alfa = described_class.models.find { |model| model.model == Alfa }
         expect(described_class.respond_to_missing?(:alfa)).to be true
         expect(described_class.alfa).to eq dirty_alfa
       end

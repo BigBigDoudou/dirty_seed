@@ -3,10 +3,10 @@
 module DirtySeed
   module Assigners
     # Draws an Float matching validators
-    class DirtyFloat < DirtyNumber
+    class Float < Number
       # Returns a value matching all validators
       # @return [Float]
-      def define_value
+      def value
         super
         faker_value(
           category: :Number,

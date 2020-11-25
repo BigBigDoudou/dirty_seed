@@ -8,15 +8,15 @@ def build_column(name: nil, type: :boolean)
   )
 end
 
-def build_dirty_attribute(name: nil, dirty_model: nil, type: :boolean)
-  DirtySeed::DirtyAttribute.new(
-    dirty_model || build_dirty_model,
+def build_attribute(name: nil, model: nil, type: :boolean)
+  DirtySeed::Attribute.new(
+    model || build_model,
     build_column(name: name, type: type)
   )
 end
 
-def build_dirty_model(model: Alfa)
-  DirtySeed::DirtyModel.new(model)
+def build_model(model: Alfa)
+  DirtySeed::Model.new(model)
 end
 
 private

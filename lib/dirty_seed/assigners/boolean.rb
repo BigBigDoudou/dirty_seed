@@ -3,10 +3,10 @@
 module DirtySeed
   module Assigners
     # Draws a value matching validators
-    class DirtyBoolean < DirtyAssigner
+    class Boolean < Assigner
       # Returns a boolean
       # @return [Boolean]
-      def define_value
+      def value
         [true, false].sample
       end
     end

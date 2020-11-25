@@ -3,10 +3,10 @@
 module DirtySeed
   module Assigners
     # Draws a value matching validators
-    class DirtyTime < DirtyAssigner
+    class Time < Assigner
       # Returns a value matching all validators
       # @return [Time]
-      def define_value
+      def value
         ::Faker::Time.between(from: DateTime.now - 42, to: DateTime.now + 42)
       end
     end

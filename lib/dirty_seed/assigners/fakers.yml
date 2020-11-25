@@ -1,80 +1,143 @@
 address:
   category: Address
   method: full_address
+  types:
+    - string
 city:
   category: Address
   method: city
+  types:
+    - string
+color:
+  category: Color
+  method: hex_color
+  types:
+    - string
+colour:
+  category: Color
+  method: hex_color
+  types:
+    - string
 country:
   category: Address
   method: country
+  types:
+    - string
+currency:
+  category: currency
+  method: code
+  types:
+    - string
 description:
   category: Lorem
   method: paragraph
+  types:
+    - string
   options:
     sentence_count: 2
     random_sentences_to_add: 4
 email:
   category: Internet
   method: email
+  types:
+    - string
   options:
     domain: example
 first_name:
   category: Name
   method: first_name
+  types:
+    - string
 firstname:
   category: Name
   method: first_name
+  types:
+    - string
 last_name:
   category: Name
   method: last_name
+  types:
+    - string
 lastname:
   category: Name
   method: last_name
+  types:
+    - string
 lat:
   category: Address
   method: latitude
+  types:
+    - float
 latitude:
   category: Address
   method: latitude
+  types:
+    - float
 lng:
   category: Address
   method: longitude
+  types:
+    - float
 locale:
   category: Address
   method: country_code
+  types:
+    - string
 longitude:
   category: Address
   method: longitude
+  types:
+    - float
 middlename:
   category: Name
   method: middle_name
+  types:
+    - string
 middle_name:
   category: Name
   method: middle_name
+  types:
+    - string
 password:
   category: Internet
   method: password
+  types:
+    - string
 phone:
   category: PhoneNumber
   method: phone_number
+  types:
+    - string
 phone_number:
   category: PhoneNumber
   method: phone_number
+  types:
+    - string
 reference:
   category: Internet
   method: uuid
+  types:
+    - string
 title:
   category: Lorem
   method: sentence
+  types:
+    - string
   options:
     word_count: 3
     random_words_to_add: 4
 user_name:
   category: Internet
   method: username
+  types:
+    - string
 username:
   category: Internet
   method: username
+  types:
+    - string
 uuid:
   category: Internet
   method: uuid
+  types:
+    - string
