@@ -9,12 +9,12 @@ RSpec.describe DirtySeed::DataModel do
         described_class.reset
         described_class.seed(1)
         # As expected, Juliett can not be seed
-        [Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India, Kilo, Lima].each do |active_record_model|
+        [Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India].each do |active_record_model|
           expect(active_record_model.count).to be > 0
         end
       end
 
-      it 'logs data' do
+      it 'logs data' do # rubocop:disable RSpec/ExampleLength
         described_class.reset
         expect { described_class.seed(8) }.to output(
           <<~LOG
@@ -38,11 +38,7 @@ RSpec.describe DirtySeed::DataModel do
               created: 8
             Juliett
               created: 0
-              errors: Alfa should be some specific alfa, String should be a specific string, Integer should be a specific integer
-            Kilo
-              created: 8
-            Lima
-              created: 8
+              errors: Alfa should be some specific alfa, A string should be a specific string, An integer should be a specific integer
           LOG
         ).to_stdout
       end
@@ -59,7 +55,7 @@ RSpec.describe DirtySeed::DataModel do
   describe '::dirty_models' do
     it 'returns an array of dirty models representing Active Record models' do
       expect(described_class.dirty_models.map(&:name)).to match_array(
-        %w[Alfa Bravo Charlie Delta Echo Foxtrot Golf Hotel India Juliett Kilo Lima]
+        %w[Alfa Bravo Charlie Delta Echo Foxtrot Golf Hotel India Juliett]
       )
     end
   end
@@ -69,14 +65,13 @@ RSpec.describe DirtySeed::DataModel do
 
     it 'returns an array of Active Record models' do
       expect(active_record_models).to match_array(
-        [Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India, Juliett, Kilo, Lima]
+        [Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India, Juliett]
       )
     end
 
     it 'sorts models with associations' do
       expect(active_record_models.index(Alfa)).to be < active_record_models.index(Delta)
       expect(active_record_models.index(Alfa)).to be < active_record_models.index(Echo)
-      expect(active_record_models.index(Alfa)).to be < active_record_models.index(Juliett)
       expect(active_record_models.index(Charlie)).to be < active_record_models.index(Echo)
     end
   end

@@ -10,25 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_23_100338) do
+ActiveRecord::Schema.define(version: 2020_09_23_100337) do
 
   create_table "alfas", force: :cascade do |t|
-    t.boolean "boolean"
-    t.integer "integer"
-    t.decimal "decimal"
-    t.string "string"
-    t.date "date"
-    t.time "time"
-    t.datetime "datetime"
+    t.boolean "a_boolean"
+    t.integer "an_integer"
+    t.decimal "a_decimal"
+    t.string "a_string"
+    t.date "a_date"
+    t.time "a_time"
+    t.datetime "a_datetime"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "bravos", force: :cascade do |t|
-    t.boolean "boolean", default: false, null: false
-    t.integer "integer", null: false
-    t.decimal "decimal", null: false
-    t.string "string", null: false
+    t.boolean "a_boolean", default: false, null: false
+    t.integer "an_integer", null: false
+    t.decimal "a_decimal", null: false
+    t.string "a_string", null: false
+    t.integer "a_unique_value"
+    t.string "a_string_from_options"
+    t.integer "an_integer_from_options"
+    t.string "an_absent_value"
+    t.string "a_regex"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -79,8 +84,8 @@ ActiveRecord::Schema.define(version: 2020_09_23_100338) do
 
   create_table "julietts", force: :cascade do |t|
     t.integer "alfa_id", null: false
-    t.string "string"
-    t.integer "integer"
+    t.string "a_string"
+    t.integer "an_integer"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["alfa_id"], name: "index_julietts_on_alfa_id"
@@ -92,35 +97,6 @@ ActiveRecord::Schema.define(version: 2020_09_23_100338) do
     t.string "reset_password_token"
     t.string "reset_password_sent_at"
     t.string "remember_created_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "limas", force: :cascade do |t|
-    t.string "address"
-    t.string "city"
-    t.string "country"
-    t.string "description"
-    t.string "email"
-    t.string "first_name"
-    t.string "firstname"
-    t.string "last_name"
-    t.string "lastname"
-    t.string "lat"
-    t.string "latitute"
-    t.string "lng"
-    t.string "locale"
-    t.string "longitude"
-    t.string "middlename"
-    t.string "middle_name"
-    t.string "password"
-    t.string "phone"
-    t.string "phone_number"
-    t.string "reference"
-    t.string "title"
-    t.string "user_name"
-    t.string "username"
-    t.string "uuid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

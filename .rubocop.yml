@@ -1,3 +1,6 @@
+require:
+  - rubocop-rspec
+  
 AllCops:
   NewCops: enable
   TargetRubyVersion: 2.6.6
@@ -98,3 +101,15 @@ Style/StringHashKeys:
 # Checks for useless trailing commas in block arguments.
 Style/TrailingCommaInBlockArgs:
   Enabled: true
+
+# Allow more lines in specs
+RSpec/ExampleLength:
+  Max: 8
+
+# Allow more nesting for detailed specs
+RSpec/NestedGroups:
+  Max: 5
+
+# Allow more expectations in one spec
+RSpec/MultipleExpectations:
+  Max: 3

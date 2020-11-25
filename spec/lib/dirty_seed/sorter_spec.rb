@@ -11,34 +11,33 @@ RSpec.describe DirtySeed::Sorter do
 
   describe '#sort' do
     it 'returns an empty array if models is empty' do
-      sorted = DirtySeed::Sorter.new([]).sort!
+      sorted = described_class.new([]).sort!
       expect(sorted).to be_empty
     end
 
     it 'sorts models by dependencies [1]' do
-      sorted = DirtySeed::Sorter.new([Alfa, Charlie]).sort!
+      sorted = described_class.new([Alfa, Charlie]).sort!
       expect(sorted).to eq([Alfa, Charlie])
     end
 
     it 'sorts models by dependencies [2]' do
-      sorted = DirtySeed::Sorter.new([Charlie, Alfa]).sort!
+      sorted = described_class.new([Charlie, Alfa]).sort!
       expect(sorted).to eq([Alfa, Charlie])
     end
 
     it 'sorts models by dependencies [3]' do
-      active_record_models = [Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India, Juliett, Kilo]
+      active_record_models = [Alfa, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India, Juliett]
       10.times do
-        sorted = DirtySeed::Sorter.new(active_record_models.shuffle).sort!
+        sorted = described_class.new(active_record_models.shuffle).sort!
         expect(sorted.index(Alfa)).to be < sorted.index(Delta)
         expect(sorted.index(Alfa)).to be < sorted.index(Echo)
-        expect(sorted.index(Charlie)).to be < sorted.index(Echo)
         expect(sorted.index(Hotel)).to be < sorted.index(India)
       end
     end
 
     context 'when infinite loop could happens' do
       it 'does not raise error' do
-        sorted = DirtySeed::Sorter.new([India, Hotel]).sort!
+        sorted = described_class.new([India, Hotel]).sort!
         expect(sorted).to eq([Hotel, India])
       end
     end

@@ -6,7 +6,7 @@ module DirtySeed
     class DirtyFloat < DirtyNumber
       # Returns a value matching all validators
       # @return [Float]
-      def value
+      def define_value
         super
         faker_value(
           category: :Number,

@@ -33,7 +33,7 @@ lastname:
 lat:
   category: Address
   method: latitude
-latitute:
+latitude:
   category: Address
   method: latitude
 lng:

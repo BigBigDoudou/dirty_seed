@@ -6,7 +6,7 @@ module DirtySeed
     class DirtyDate < DirtyAssigner
       # Returns a date matching all validators
       # @return [Date]
-      def value
+      def define_value
         faker_value(
           category: :Date,
           method: :between,

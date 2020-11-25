@@ -1,5 +1,3 @@
-> **Work in progress!**
-
 # DirtySeed
 
 :seedling: Populate the database with records matching associations and validations in order to quickly test the application rendering.
@@ -9,7 +7,7 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'dirty_seed', '~> 0.1.6'
+gem 'dirty_seed', '~> 0.1.7'
 ```
 
 And then execute:
@@ -22,28 +20,36 @@ $ bundle
 Once you've installed the gem, you can use the dedicated task.
 
 To seed dirty data, run:
+
 ```bash
 $ rake dirty_seed:seed
 ```
 
-This will create records for each model inheriting from `ApplicationRecord`.
+This will create `10` records for each model inheriting from `ApplicationRecord`.
 
-Instance that cannot be saved ar simply ignored.
-
-For each model, the number of created created records and the recurrent errors are logged:
+You can change the number of records to seed by adding a `COUNT` variable:
 
 ```bash
-rake dirty_seed:seed
+$ rake dirty_seed:seed COUNT=42
+```
+
+Instance that cannot be saved are simply ignored.
+
+For each model, the number of created created records and the recurrent errors are printed out:
+
+```bash
+rake dirty_seed:seed COUNT=15
+
 User
   created: 15
 Article
-  created: 9
-  errors: Title should match a specific regex
+  created: 0
+  errors: Title should contains the user name and the current date
 ```
 
 ### Database population
 
-For each model inheriting from `ApplicationRecord`, 15 records are created.
+For each model inheriting from `ApplicationRecord`, records are created.
 
 Models are sorted by their dependency to each others (through a `belongs_to` association) to ensure that some records exist before seeding an instance that requires one.
 
@@ -179,15 +185,16 @@ notification.bar.class # Thing
 
 For attributes requiring validations, assigned value is adapted.
 
-Currently, only the following validations are treated:
+Currently, the following validations are treated:
 
+- `uniqueness`
+- `absence`
+- `inclusion: { in: [x, y] }`
 - `numericality: { greater_than: x }`
 - `numericality: { greater_than_or_equal_to: x }`
 - `numericality: { lesser_than: x }`
 - `numericality: { lesser_than_or_equal_to: x }`
 - `numericality: { in: x..y }`
-
-Much more validations will be treated soon: `uniqueness`, `absence`, `inclusion`, `exclusion`, `length`...
 
 Custom validations are not inspected.
 
@@ -245,7 +252,7 @@ The current attribute names treated this way are:
 - `last_name`
 - `lastname`
 - `lat`
-- `latitute`
+- `latitude`
 - `lng`
 - `locale`
 - `longitude`
@@ -260,20 +267,20 @@ The current attribute names treated this way are:
 - `username`
 - `uuid`
 
-More meanings will be added and will extend the mechanism to other formats (e.g. an `age` integer).
+More meanings will be added soon and will extend the mechanism to other formats (e.g. an `age` integer).
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
-## Next features
+## Next features and improvements
 
-* Seed instance by batch to increase performances
-* Add a configuration system to define how to seed: number of instances, models to skip, default values, etc.
+* Integrate more validations (length, exclusion, etc.).
 * Assign values for more data types (json, array, etc.).
-* Detect more "special" attributes to ignore.
-* Integrate more validations (uniqueness, inclusion, length, absence, etc.).
 * Detect more meanings and extend it to other formats.
+* Detect more "special" attributes to ignore.
 * Use instance errors to adjust values and eventually match custom validations.
+* Add a configuration system to define how to seed: models to skip, default values, etc.
+* Increase performances.
 
 

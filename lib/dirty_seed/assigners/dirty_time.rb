@@ -6,7 +6,7 @@ module DirtySeed
     class DirtyTime < DirtyAssigner
       # Returns a value matching all validators
       # @return [Time]
-      def value
+      def define_value
         ::Faker::Time.between(from: DateTime.now - 42, to: DateTime.now + 42)
       end
     end

@@ -29,18 +29,23 @@ module DirtySeed
     # @param instance [Object] an instance of a class inheriting from ApplicationRecord
     # @param sequence [Integer]
     # @return [void]
-    def assign_value(instance, sequence)
-      instance.assign_attributes(name => value(sequence))
+    def assign_value(instance)
+      instance.assign_attributes(name => value)
     rescue ArgumentError => e
       dirty_model.errors << e
     end
 
     # Returns a value matching type and validators
-    # @param sequence [Integer]
     # @return [Object, nil]
-    def value(sequence)
-      assigner = "DirtySeed::Assigners::Dirty#{type.capitalize}".constantize
-      assigner.new(self, sequence).value
+    def value
+      assigner&.value
+    end
+
+    # Returns the attribute assigner
+    # @return [DirtySeed::DirtyAssigner]
+    def assigner
+      @assigner ||=
+        "DirtySeed::Assigners::Dirty#{type.capitalize}".constantize.new(self)
     # If attribute type is not currently handled (json, array...) return nil
     rescue NameError
       nil

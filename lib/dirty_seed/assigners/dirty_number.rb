@@ -8,9 +8,16 @@ module DirtySeed
 
       # Returns an value matching all validators
       # @return [Integer, Float]
-      def value
-        define_min_and_max
-        adjust_values
+      def define_value
+        unless min && max
+          define_min_and_max
+          adjust_values
+        end
+        faker_value(
+          category: :Number,
+          method: :between,
+          options: { from: min, to: max }
+        )
       end
 
       private

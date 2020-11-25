@@ -31,7 +31,9 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
   end
 
-  config.around(:each) do |example|
+  config.around do |example|
+    DirtySeed::DataModel.reset
+    Faker::UniqueGenerator.clear
     DirtySeed::Engine.initializers.each(&:run)
     DatabaseCleaner.cleaning do
       example.run

@@ -22,4 +22,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'faker', '~> 2.14.0'
   spec.add_dependency 'rails', '>= 5.0', '< 7.0'
+  spec.add_dependency 'regexp-examples'
 end

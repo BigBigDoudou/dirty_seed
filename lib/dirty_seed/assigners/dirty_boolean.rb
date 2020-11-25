@@ -6,7 +6,7 @@ module DirtySeed
     class DirtyBoolean < DirtyAssigner
       # Returns a boolean
       # @return [Boolean]
-      def value
+      def define_value
         [true, false].sample
       end
     end
