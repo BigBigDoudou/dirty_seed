@@ -56,7 +56,11 @@ module DirtySeed
       # Returns a standard string
       # @return [String]
       def default
-        ::Faker::Lorem.unique.sentence(word_count: 3, supplemental: false, random_words_to_add: 4)
+        faker_value(
+          category: :Lorem,
+          method: :sentence,
+          options: { word_count: 3, supplemental: false, random_words_to_add: 4 }
+        )
       end
 
       # Returns the regex pattern if value should respect a format
