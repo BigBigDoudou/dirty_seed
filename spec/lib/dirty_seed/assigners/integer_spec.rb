@@ -33,7 +33,8 @@ RSpec.describe DirtySeed::Assigners::Integer do
     context 'when there are less_than and greater_than validators' do
       it 'returns an integer greater than and less than the requirements' do
         assigner = described_class.new(attribute)
-        validator = ActiveModel::Validations::NumericalityValidator.new(attributes: :fake, greater_than: 1, less_than: 5)
+        validator =
+          ActiveModel::Validations::NumericalityValidator.new(attributes: :fake, greater_than: 1, less_than: 5)
         allow(attribute).to receive(:validators).and_return([validator])
         10.times { expect(assigner.value).to be_between(1, 5).exclusive }
       end

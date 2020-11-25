@@ -6,7 +6,7 @@ module DirtySeed
     extend ::DirtySeed::MethodMissingHelper
     forward_missing_methods_to :model
 
-    attr_reader :model, :instances, :errors
+    attr_reader :model, :instances
 
     PROTECTED_COLUMNS = %w[
       id
