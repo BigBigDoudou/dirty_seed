@@ -7,7 +7,7 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'dirty_seed', '~> 0.1.7'
+gem 'dirty_seed', '~> 0.1.8'
 ```
 
 And then execute:
