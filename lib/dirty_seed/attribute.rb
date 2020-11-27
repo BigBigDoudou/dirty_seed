@@ -39,14 +39,20 @@ module DirtySeed
     # @note When attribute is serialized as array, it raises an error
     #   if value is not an array -> use this to define if it is an array
     def array?
+      return @array unless @array.nil?
       return true if sql_type_metadata.type.to_s.include? '[]'
 
-      model&.new(name => '')
-      # it does not raise error -> it is not a serialized array
-      false
-    rescue ActiveRecord::SerializationTypeMismatch
-      # it raises an error -> it is (certainly) a serialized array
-      true
+      begin
+        model&.new(name => '')
+        # it does not raise error -> it is not a serialized array
+        false
+      rescue ActiveRecord::SerializationTypeMismatch
+        # it raises an error -> it is (certainly) a serialized array
+        true
+      rescue StandardError
+        # if any other error raises, return false
+        false
+      end
     end
 
     # Returns validators
