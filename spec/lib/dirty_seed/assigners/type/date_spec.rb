@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe DirtySeed::Assigners::Date do
-  let(:attribute) { build_attribute(type: :date) }
+RSpec.describe DirtySeed::Assigners::Type::Date do
+  let(:attribute) { build_attribute(:date) }
 
   describe '#value' do
     context 'when there are no validators' do

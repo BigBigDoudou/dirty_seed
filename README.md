@@ -7,7 +7,7 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'dirty_seed', '~> 0.1.8'
+gem 'dirty_seed', '~> 0.2.0'
 ```
 
 And then execute:
@@ -278,11 +278,8 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Next features and improvements
 
-* Integrate more validations (length, exclusion, etc.).
-* Assign values for more data types (json, array, etc.).
-* Detect more meanings and extend it to other formats.
-* Detect more "special" attributes to ignore.
-* Use instance errors to adjust values and eventually match custom validations.
-* Add a configuration system to define how to seed: models to skip, default values, etc.
-
-
+* Add specs to validate specific errors rescue.
+* Manage validations on dates and times.
+* Detect more meaningful attributes.
+* Detect more protected attributes (to ignore).
+* Add a configuration system to define how to seed: excluded models, default values, faker method...

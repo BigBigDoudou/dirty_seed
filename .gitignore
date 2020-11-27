@@ -10,3 +10,7 @@ spec/dummy/tmp/
 
 /coverage/*
 !/coverage/.keep
+
+.yardoc
+.yardopts
+doc

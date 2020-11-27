@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe DirtySeed::Assigners::Boolean do
-  let(:attribute) { build_attribute(type: :boolean) }
+RSpec.describe DirtySeed::Assigners::Type::Boolean do
+  let(:attribute) { build_attribute(:boolean) }
 
   describe '#value' do
     it 'returns a Boolean' do

@@ -4,6 +4,6 @@ namespace :dirty_seed do
   desc 'Explaining what the task does'
   task seed: :environment do
     count = ENV['COUNT']&.to_i || 10
-    DirtySeed::DataModel.seed(count)
+    DirtySeed::DataModel.instance.seed(count, verbose: true)
   end
 end

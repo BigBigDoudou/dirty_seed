@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dirty_seed (0.1.7)
+    dirty_seed (0.2.0)
       faker (~> 2.14.0)
       rails (>= 5.0, < 7.0)
       regexp-examples
@@ -170,6 +170,13 @@ GEM
       unicode-display_width (>= 1.4.0, < 2.0)
     rubocop-ast (1.1.1)
       parser (>= 2.7.1.5)
+    rubocop-performance (1.9.0)
+      rubocop (>= 0.90.0, < 2.0)
+      rubocop-ast (>= 0.4.0)
+    rubocop-rails (2.8.1)
+      activesupport (>= 4.2.0)
+      rack (>= 1.1)
+      rubocop (>= 0.87.0)
     rubocop-rspec (2.0.0)
       rubocop (~> 1.0)
       rubocop-ast (>= 1.1.0)
@@ -209,6 +216,8 @@ DEPENDENCIES
   pry-rails
   rspec-rails
   rubocop
+  rubocop-performance
+  rubocop-rails
   rubocop-rspec
   simplecov
   sqlite3

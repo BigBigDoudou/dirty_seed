@@ -2,33 +2,19 @@
 
 module DirtySeed
   # Represents an Active Record association
-  class Association
-    extend ::DirtySeed::MethodMissingHelper
-    forward_missing_methods_to :reflections
-
-    attr_reader :model, :reflection
-
-    # Initializes an instance
-    # @param model [DirtySeed::Model]
+  class Association < SimpleDelegator
+    # @!method initialize(reflection)
     # @param reflection [ActiveRecord::Reflection::BelongsToReflection]
     # @return [DirtySeed::Association]
-    def initialize(model, reflection)
-      @model = model
-      @reflection = reflection
-    end
 
     # Returns a random instance matching the reflection
-    # @return [Object] an instance of a class inheriting from ApplicationRecord
+    # @return [Object, nil] an instance of a class inheriting from ApplicationRecord
     def value
+      return if associated_models.empty?
+
       random_model = associated_models.sample
       random_id = random_model.pluck(:id).sample
       random_model.find_by(id: random_id)
-    end
-
-    # Returns the reflection name
-    # @return [String]
-    def name
-      reflection.name
     end
 
     # Returns the attribute containing the foreign key
@@ -38,13 +24,13 @@ module DirtySeed
     end
 
     # Returns the attribute containing the foreign type (for polymorphic associations)
+    # @return [Symbol]
     # @example
     #   Given Bar.belongs_to(:barable, polymorphic: true)
     #   And self.model == Bar
     #   Then it returns barable_type
-    # @return [Symbol]
     def type_key
-      reflection.foreign_type&.to_sym
+      foreign_type&.to_sym
     end
 
     # Returns or defines associated_models
@@ -53,43 +39,57 @@ module DirtySeed
       polymorphic? ? polymorphic_associations : regular_associations
     end
 
-    # Returns true if the reflection is polymorphic
+    # Is the association optional?
+    # @return [Boolean]
+    # @example
+    #   Given Bar.belongs_to(:barable, optional: true)
+    #   And self.model == Bar
+    #   Then it returns true
+    def optional?
+      options[:optional].present?
+    end
+
+    # Is the reflection polymorphic?
+    # @return [Boolean]
     # @example
     #   Given Bar.belongs_to(:barable, polymorphic: true)
     #   And self.model == Bar
     #   Then it returns true
-    # @return [Boolean]
     def polymorphic?
-      reflection.options[:polymorphic]
+      options[:polymorphic].present?
     end
 
     private
 
     # Returns the reflected models for a regular association
+    # @return [Array<Class>] a class inheriting from ApplicationRecord
     # @example
     #   Given Bar.belongs_to(:foo)
     #   And Foo.has_many(:bars)
     #   And self.model == Bar
     #   Then it returns [Foo]
-    # @return [Array<Class>] a class inheriting from ApplicationRecord
     def regular_associations
-      [reflection.klass]
+      [klass]
+    rescue NameError
+      []
     end
 
     # Returns the reflected models for a polymorphic association
+    # @return [Array<Class>] a class inheriting from ApplicationRecord
     # @example
     #   Given Bar.belongs_to(:barable, polymorphic: true)
     #   And Foo.has_many(:bars, as: :barable)
     #   And Zed.has_many(:bars, as: :barable)
     #   And #model is Bar
     #   Then it returns [Foo, Zed]
-    # @return [Array<Class>] a class inheriting from ApplicationRecord
     def polymorphic_associations
-      DirtySeed::DataModel.active_record_models.select do |active_record_model|
+      DirtySeed::DataModel.instance.active_record_models.select do |active_record_model|
         active_record_model.reflections.values.any? do |arm_reflection|
           arm_reflection.options[:as]&.to_sym == name
         end
       end
+    rescue NameError
+      []
     end
   end
 end

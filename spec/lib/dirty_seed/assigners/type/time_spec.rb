@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe DirtySeed::Assigners::Time do
-  let(:attribute) { build_attribute(type: :time) }
+RSpec.describe DirtySeed::Assigners::Type::Time do
+  let(:attribute) { build_attribute(:time) }
 
   describe '#value' do
     context 'when there are no validators' do

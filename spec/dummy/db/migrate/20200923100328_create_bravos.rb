@@ -10,6 +10,9 @@ class CreateBravos < ActiveRecord::Migration[6.0]
       t.integer :an_integer_from_options
       t.string :an_absent_value
       t.string :a_regex
+      t.integer :an_enum
+      t.json :a_json
+      t.text :an_array
 
       t.timestamps
     end

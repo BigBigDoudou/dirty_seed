@@ -1,35 +1,35 @@
 address:
-  category: Address
+  generator: Address
   method: full_address
   types:
     - string
 city:
-  category: Address
+  generator: Address
   method: city
   types:
     - string
 color:
-  category: Color
+  generator: Color
   method: hex_color
   types:
     - string
 colour:
-  category: Color
+  generator: Color
   method: hex_color
   types:
     - string
 country:
-  category: Address
+  generator: Address
   method: country
   types:
     - string
 currency:
-  category: currency
+  generator: Currency
   method: code
   types:
     - string
 description:
-  category: Lorem
+  generator: Lorem
   method: paragraph
   types:
     - string
@@ -37,89 +37,89 @@ description:
     sentence_count: 2
     random_sentences_to_add: 4
 email:
-  category: Internet
+  generator: Internet
   method: email
   types:
     - string
   options:
     domain: example
 first_name:
-  category: Name
+  generator: Name
   method: first_name
   types:
     - string
 firstname:
-  category: Name
+  generator: Name
   method: first_name
   types:
     - string
 last_name:
-  category: Name
+  generator: Name
   method: last_name
   types:
     - string
 lastname:
-  category: Name
+  generator: Name
   method: last_name
   types:
     - string
 lat:
-  category: Address
+  generator: Address
   method: latitude
   types:
     - float
 latitude:
-  category: Address
+  generator: Address
   method: latitude
   types:
     - float
 lng:
-  category: Address
+  generator: Address
   method: longitude
   types:
     - float
 locale:
-  category: Address
+  generator: Address
   method: country_code
   types:
     - string
 longitude:
-  category: Address
+  generator: Address
   method: longitude
   types:
     - float
 middlename:
-  category: Name
+  generator: Name
   method: middle_name
   types:
     - string
 middle_name:
-  category: Name
+  generator: Name
   method: middle_name
   types:
     - string
 password:
-  category: Internet
+  generator: Internet
   method: password
   types:
     - string
 phone:
-  category: PhoneNumber
+  generator: PhoneNumber
   method: phone_number
   types:
     - string
 phone_number:
-  category: PhoneNumber
+  generator: PhoneNumber
   method: phone_number
   types:
     - string
 reference:
-  category: Internet
+  generator: Internet
   method: uuid
   types:
     - string
 title:
-  category: Lorem
+  generator: Lorem
   method: sentence
   types:
     - string
@@ -127,17 +127,17 @@ title:
     word_count: 3
     random_words_to_add: 4
 user_name:
-  category: Internet
+  generator: Internet
   method: username
   types:
     - string
 username:
-  category: Internet
+  generator: Internet
   method: username
   types:
     - string
 uuid:
-  category: Internet
+  generator: Internet
   method: uuid
   types:
     - string

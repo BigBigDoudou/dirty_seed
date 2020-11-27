@@ -8,14 +8,14 @@ class Juliett < ApplicationRecord
   private
 
   def custom_alfa_validation
-    errors.add(:alfa, 'should be some specific alfa')
+    errors.add(:alfa, 'should be specific')
   end
 
   def custom_string_validation
-    errors.add(:a_string, 'should be a specific string')
+    errors.add(:a_string, 'should be specific')
   end
 
   def custom_integer_validation
-    errors.add(:an_integer, 'should be a specific integer')
+    errors.add(:an_integer, 'should be specific')
   end
 end

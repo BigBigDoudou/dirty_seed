@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_23_100337) do
+ActiveRecord::Schema.define(version: 2020_09_23_100336) do
 
   create_table "alfas", force: :cascade do |t|
     t.boolean "a_boolean"
@@ -20,6 +20,11 @@ ActiveRecord::Schema.define(version: 2020_09_23_100337) do
     t.date "a_date"
     t.time "a_time"
     t.datetime "a_datetime"
+    t.string "type"
+    t.string "encrypted_password"
+    t.string "reset_password_token"
+    t.string "reset_password_sent_at"
+    t.string "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -34,12 +39,16 @@ ActiveRecord::Schema.define(version: 2020_09_23_100337) do
     t.integer "an_integer_from_options"
     t.string "an_absent_value"
     t.string "a_regex"
+    t.integer "an_enum"
+    t.json "a_json"
+    t.text "an_array"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "charlies", force: :cascade do |t|
     t.integer "alfa_id", null: false
+    t.json "a_json"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["alfa_id"], name: "index_charlies_on_alfa_id"
@@ -89,16 +98,6 @@ ActiveRecord::Schema.define(version: 2020_09_23_100337) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["alfa_id"], name: "index_julietts_on_alfa_id"
-  end
-
-  create_table "kilos", force: :cascade do |t|
-    t.string "type"
-    t.string "encrypted_password"
-    t.string "reset_password_token"
-    t.string "reset_password_sent_at"
-    t.string "remember_created_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   add_foreign_key "charlies", "alfas"

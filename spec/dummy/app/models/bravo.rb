@@ -7,7 +7,7 @@ class Bravo < ApplicationRecord
   validates :an_absent_value, absence: true
   validates :a_regex, format: { with: /\w{10}@(hotmail|gmail)\.com/ }
 
-  def attr_test
-    attribute(:integer)
-  end
+  enum an_enum: [ :foo, :bar ]
+
+  serialize :an_array, Array
 end

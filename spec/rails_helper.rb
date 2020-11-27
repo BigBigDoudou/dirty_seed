@@ -17,7 +17,7 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'database_cleaner'
 require 'factory_bot_rails'
 require 'rspec/rails'
-Dir[Rails.root.join('..', '..', 'spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+Dir[Rails.root.join('../../spec/support/**/*.rb')].sort.each { |f| require f }
 
 # Load migrations from the dummy app.
 ActiveRecord::Migrator.migrations_paths = File.join(ENGINE_ROOT, 'spec/dummy/db/migrate')
@@ -32,7 +32,8 @@ RSpec.configure do |config|
   end
 
   config.around do |example|
-    DirtySeed::DataModel.reset
+    DirtySeed::DataModel.instance.models = nil
+    DirtySeed::DataModel.instance.seeders = nil
     Faker::UniqueGenerator.clear
     DirtySeed::Engine.initializers.each(&:run)
     DatabaseCleaner.cleaning do
