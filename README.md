@@ -76,7 +76,7 @@ end
 
 A value is assigned for each attribute, depending on its type.
 
-Special types (`hstore`, `json`, `jsonb`, `array`...) are currently ignored (no value assignment).
+Special types like `json`, `jsonb` and `array` are treated.
 
 For instance, given the following schema:
 
@@ -93,6 +93,8 @@ create_table 'things' do |t|
   t.string 'a_string'
   t.text 'a_text'
   t.time 'a_time'
+  t.json 'a_json'
+  t.text[] 'an_array'
 end
 ```
 
@@ -100,7 +102,6 @@ end
 
 ```ruby
 {
-  id: 1,
   a_binary: '13',
   a_boolean: false,
   a_date: Wed, '02 Dec 2020',
@@ -110,7 +111,9 @@ end
   a_float: 28.825997012616263,
   a_string: 'Maxime eum ratione ab quod nihil.',
   a_text: 'Autem non in est dolore.',
-  a_time: 'Sat, 01 Jan 2000 09:31:22 UTC +00:00'
+  a_time: 'Sat, 01 Jan 2000 09:31:22 UTC +00:00',
+  a_json: { 'Autem': 'Dolore', 'Lorem': 'Nihil' },
+  an_array: ['Autem', 'Dolore', 'Nihil'],
 }
 ```
 
@@ -169,7 +172,6 @@ end
 
 ```ruby
 {
-  :id => 1,
   :thing_id => 42,
   :notifiable_type => 'User',
   :notifiable_id => 6,
@@ -187,14 +189,21 @@ For attributes requiring validations, assigned value is adapted.
 
 Currently, the following validations are treated:
 
-- `uniqueness`
 - `absence`
+- `format: { with: regex }` 
 - `inclusion: { in: [x, y] }`
+- `length: { minimum: x }`
+- `length: { maximum: x }`
+- `length: { in: x..y }`
+- `length: { is: x }`
 - `numericality: { greater_than: x }`
 - `numericality: { greater_than_or_equal_to: x }`
 - `numericality: { lesser_than: x }`
 - `numericality: { lesser_than_or_equal_to: x }`
 - `numericality: { in: x..y }`
+- `uniqueness`
+
+Attribute with an `enum` are treated too.
 
 Custom validations are not inspected.
 
@@ -226,7 +235,6 @@ end
 
 ```ruby
 {
-  id: 1,
   first_name: 'Emory',
   last_name: 'Franecki',
   address: '843 Schneider Squares, Port Olenmouth, TN 12657',
@@ -270,16 +278,14 @@ The current attribute names treated this way are:
 - `username`
 - `uuid`
 
-More meanings will be added soon and will extend the mechanism to other formats (e.g. an `age` integer).
-
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
 ## Next features and improvements
 
-* Add specs to validate specific errors rescue.
+* Add specs to validate all specific errors rescue.
 * Manage validations on dates and times.
 * Detect more meaningful attributes.
-* Detect more protected attributes (to ignore).
+* Detect more protected attributes (attributes to ignore).
 * Add a configuration system to define how to seed: excluded models, default values, faker method...
