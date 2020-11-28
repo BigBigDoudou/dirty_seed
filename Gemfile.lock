@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dirty_seed (0.2.0)
+    dirty_seed (0.2.1)
       faker (~> 2.14.0)
       rails (>= 5.0, < 7.0)
       regexp-examples

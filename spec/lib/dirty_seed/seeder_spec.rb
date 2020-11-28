@@ -13,14 +13,14 @@ RSpec.describe DirtySeed::Seeder do
   end
 
   describe '#seed(count)' do
-    it 'tries to create x instances of the model' do
+    it 'tries to create x records of the model' do
       expect { described_class.new(DirtySeed::Model.new(Bravo)).seed(3) }.to change(Bravo, :count).by(3)
     end
 
-    it 'stores the number of successfully seeded instances' do
+    it 'stores the number of successfully seeded records' do
       seeder = described_class.new(alfa)
       seeder.seed(3)
-      expect(seeder.instances.count).to eq 3
+      expect(seeder.records.count).to eq 3
     end
 
     context 'when it raises ActiveRecord::RecordInvalid error' do

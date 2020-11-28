@@ -10,16 +10,13 @@ RSpec.describe DirtySeed::DataModel do
       end
 
       context 'when logger is "verbose"' do
-        before do
-          DirtySeed::Logger.instance.verbose!
-        end
-
         it 'logs seeded records count' do
-          expect { described_class.instance.seed(2) }.to output(/seeded: 2/).to_stdout
+          expect { described_class.instance.seed(2, verbose: true) }.to output(/seeded: 2/).to_stdout
         end
 
         it 'logs unique errors' do
-          expect { described_class.instance.seed(1) }.to output(/(errors:)(.*)(string should be specific)/).to_stdout
+          expect { described_class.instance.seed(1, verbose: true) }
+            .to output(/(errors:)(.*)(string should be specific)/).to_stdout
         end
       end
     end

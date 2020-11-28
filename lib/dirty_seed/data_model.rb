@@ -24,10 +24,10 @@ module DirtySeed
     # @param verbose [Boolean] true if logs should be outputed
     # @return [void]
     def seed(count, verbose: false)
-      logger.verbose! if verbose
+      logger.verbose = verbose
       # check if ApplicationRecord is defined first (or raise error)
       ::ApplicationRecord && seeders.each { |seeder| seeder.seed(count) }
-      print_logs
+      logger.summary(seeders)
     end
 
     # Creates and returns a seeder for each model
@@ -52,13 +52,6 @@ module DirtySeed
     # @return [Array<Class>] a class inheriting from ApplicationRecord
     def active_record_models
       ::ApplicationRecord.descendants.reject(&:abstract_class)
-    end
-
-    # Prints logs in the console
-    # @return [void]
-    def print_logs
-      logger.break_line
-      seeders.each { |seeder| logger.seeder_data(seeder) }
     end
   end
 end
