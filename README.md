@@ -35,7 +35,7 @@ $ rake dirty_seed:seed COUNT=42
 
 Instance that cannot be saved are simply ignored.
 
-For each model, the number of created created records and the recurrent errors are printed out:
+For each model, the number of created records and the recurrent errors are printed out:
 
 ```bash
 rake dirty_seed:seed COUNT=15

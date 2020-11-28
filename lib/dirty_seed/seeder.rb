@@ -3,7 +3,7 @@
 module DirtySeed
   # Represents an Active Record model
   class Seeder
-    attr_reader :model, :instances, :errors
+    attr_reader :model, :instances, :errors, :scout
 
     # Initializes an instance
     # @param model [DirtySeed::Model]
@@ -19,9 +19,10 @@ module DirtySeed
     # @return [Array<Object>]
     def seed(count)
       logger.seed(model)
+      return unless scout?
+
       @count = count
       create_records
-      @errors.uniq!
       instances
     end
 
@@ -45,6 +46,39 @@ module DirtySeed
       DirtySeed::Logger.instance
     end
 
+    # Creates a record to validate it is possible
+    # @return [Boolean]
+    # @note The purpose is to avoid generating x useless params
+    def scout?
+      @count = 1
+      data = params_collection.first
+      scout_initialize(data) && scout_save
+    end
+
+    # Validates that initializing a record is possible
+    # @return [Boolean]
+    def scout_initialize(data)
+      @scout = model.new(data)
+      return true if scout.valid?
+
+      @errors |= scout.errors.full_messages
+      logger.fail && false
+    rescue StandardError => e
+      @errors |= [logger.clean(e.message)]
+      logger.error && false
+    end
+
+    # Validates that saving a record is possible (without saving it!)
+    # @return [Boolean]
+    def scout_save
+      scout.run_callbacks(:save)
+      scout.run_callbacks(:commit)
+      true
+    rescue StandardError => e
+      @errors |= [logger.clean(e.message)]
+      logger.error && false
+    end
+
     # Creates records
     # @return [void]
     def create_records
@@ -54,10 +88,14 @@ module DirtySeed
         instance = model.new(data[i])
         save(instance)
       # rescue from errors on initialize
+      # :nocov:
+      # Random scenario where scout passes but an following is not because of specific validations
+      #   For example `after_save: { |record| raise StandardError if record.name == "Chuck Norris" }`
       rescue StandardError => e
-        @errors << e.message
+        @errors |= [logger.clean(e.message)]
         logger.error
       end
+      # :nocov:
       logger.break_line
     end
 
@@ -68,14 +106,22 @@ module DirtySeed
       if instance.save
         logger.success
         @instances << instance
+      # :nocov:
+      # Random scenario where scout passes but an following is not because of specific validations
+      #   For example `before_save: { |record| record.name != "Chuck Norris" }`
       else
         logger.fail
-        @errors.concat(instance.errors.full_messages)
+        @errors |= instance.errors.full_messages
+        # :nocov:
       end
     # rescue from errors on save
+    # :nocov:
+    # Random scenario where scout passes but an following is not because of specific validations
+    #   For example `after_save: { |record| raise StandardError if record.name == "Chuck Norris" }`
     rescue StandardError => e
-      @errors << e.message
+      @errors |= [logger.clean(e.message)]
       logger.error
+      # :nocov:
     end
 
     # Generate records params

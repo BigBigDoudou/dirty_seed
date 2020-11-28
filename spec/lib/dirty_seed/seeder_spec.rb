@@ -23,16 +23,15 @@ RSpec.describe DirtySeed::Seeder do
       expect(seeder.instances.count).to eq 3
     end
 
-    it 'stores the errors' do
-      Alfa.create
-      seeder = described_class.new(DirtySeed::Model.new(Juliett))
-      seeder.seed(3)
-      expect(seeder.errors).to include('Alfa should be specific')
-      expect(seeder.errors).to include('A string should be specific')
-      expect(seeder.errors).to include('An integer should be specific')
+    context 'when it raises ActiveRecord::RecordInvalid error' do
+      it 'stores the error' do
+        seeder = described_class.new(DirtySeed::Model.new(Juliett))
+        seeder.seed(1)
+        expect(seeder.errors).to include('A string should be specific')
+      end
     end
 
-    context 'when the application throws error' do
+    context 'when it raises another StandardError' do
       let(:seeder) { described_class.new(alfa) }
 
       context 'when it happens on initialize' do
@@ -42,14 +41,16 @@ RSpec.describe DirtySeed::Seeder do
           allow(seeder).to receive(:params_collection).and_return([{ a_string: bad_string }])
         end
 
-        it 'rescues from error' do
+        it 'rescues from StandardError' do
           expect { Alfa.new(a_string: bad_string) }.to raise_error StandardError
           expect { seeder.seed(1) }.not_to raise_error
         end
 
-        it 'adds error to the errors list' do
-          seeder.seed(1)
-          expect(seeder.errors).to include('StandardError')
+        it 'cleans and adds error message to the errors list' do
+          seeder.seed(10)
+          expect(seeder.errors.count).to eq 1
+          expect(seeder.errors.first.length).to be <= 200
+          expect(seeder.errors.first).not_to include("\n")
         end
       end
 
@@ -60,14 +61,16 @@ RSpec.describe DirtySeed::Seeder do
           allow(seeder).to receive(:params_collection).and_return([{ a_string: bad_string }])
         end
 
-        it 'rescues from error' do
+        it 'rescues from StandardError' do
           expect { Alfa.create(a_string: bad_string) }.to raise_error StandardError
           expect { seeder.seed(1) }.not_to raise_error
         end
 
-        it 'adds error to the errors list' do
-          seeder.seed(1)
-          expect(seeder.errors).to include('StandardError')
+        it 'cleans and adds error message to the errors list' do
+          seeder.seed(10)
+          expect(seeder.errors.count).to eq 1
+          expect(seeder.errors.first.length).to be <= 200
+          expect(seeder.errors.first).not_to include("\n")
         end
       end
     end

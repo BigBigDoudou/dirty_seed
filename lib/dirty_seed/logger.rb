@@ -19,6 +19,15 @@ module DirtySeed
       verbose && puts("Seeding #{model.name.underscore.pluralize}")
     end
 
+    # Cleans the message before output (remove linebreak and truncate)
+    # @param message [String]
+    # @return string
+    def clean(message)
+      base = message.tr("\n", "\t")
+      # #truncate is defined in ActiveSupport and then could be undefined
+      base.respond_to?(:truncate) ? base.truncate(150) : base.slice(150)
+    end
+
     # Outputs the start of a new line
     # @return [void]
     def start_line
